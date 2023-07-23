@@ -1,5 +1,5 @@
 # nosdump
-A command line tool which dumps events stored in Nostr relays, in a form of [JSON-Lines](https://jsonlines.org/) (also known as [NDJSON](http://ndjson.org/)).
+A command line tool which dumps events stored in Nostr relays, in [JSON-Lines](https://jsonlines.org/) format (also known as [NDJSON](http://ndjson.org/)).
 
 ## Installation
 [Install Deno](https://deno.land/manual/getting_started/installation) and run:
