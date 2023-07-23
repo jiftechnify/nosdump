@@ -16,7 +16,7 @@ deno install --allow-net https://deno.land/x/nosdump@0.1.0/main.ts
 
 ## Usage
 ```sh
-nosudmp <relay URLs>
+nosdump <relay URLs>
 ```
 
 ## Example
