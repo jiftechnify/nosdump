@@ -1,4 +1,10 @@
-# nosdump
+# nosdump  
+
+[![deno.land shield]][deno.land link]
+
+[deno.land shield]: https://shield.deno.dev/x/nosdump
+[deno.land link]: https://deno.land/x/nosdump
+
 A command line tool which dumps events stored in Nostr relays, in [JSON-Lines](https://jsonlines.org/) format (also known as [NDJSON](http://ndjson.org/)).
 
 ## Installation
