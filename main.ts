@@ -1,7 +1,14 @@
+import { readAllSync } from "./deps.ts";
 import { parseInput } from "./input_parser.ts";
 import { dumpNostrEvents } from "./mod.ts";
 
-const { miscOptions, ...params } = await parseInput(Deno.args);
+// if Deno.isatty(Deno.stdin.rid) returns false, stdin is connected to a pipe.
+// cf. https://zenn.dev/kawarimidoll/articles/5559a185156bf4#deno.stdin%E3%81%AE%E5%87%A6%E7%90%86
+const stdinText = !Deno.isatty(Deno.stdin.rid)
+  ? new TextDecoder("utf-8").decode(readAllSync(Deno.stdin))
+  : "";
+
+const { miscOptions, ...params } = await parseInput(Deno.args, stdinText);
 
 if (miscOptions.dryRun) {
   console.log("Parsed options:");

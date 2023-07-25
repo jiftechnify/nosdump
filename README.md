@@ -14,6 +14,53 @@ A command line tool which dumps events stored in [Nostr](https://github.com/nost
 deno install --allow-net https://deno.land/x/nosdump@0.2.0/main.ts
 ```
 
+## Examples
+### Basics
+
+Dump all events stored in the relay `wss://relay.damus.io` to a file:
+
+```sh
+nosdump wss://relay.damus.io > dump.jsonl
+```
+
+Dump all text events (kind:1) and reaction events (kind:7):
+
+```sh
+nosdump --kinds 1,7 wss://relay.damus.io > dump.jsonl
+```
+
+Dump all your events:
+
+```sh
+nosdump --authors <your pubkey (hex)> wss://relay.damus.io > dump.jsonl
+```
+
+Dump all reply events to you:
+
+```sh
+nosdump --kinds 1 --tag p:<your pubkey (hex)> wss://relay.damus.io > dump.jsonl
+```
+
+### Read a filter from stdin
+nosdump parses stdin as a Nostr filter by default, so the following command works as expected:
+
+```sh
+echo '{ "kinds": [1, 7] }' | nosdump wss://relay.damus.io > dump.jsonl
+```
+
+If `-R` (`--stdin-req`) flag is specified, nosdump parses stdin as *a REQ message* instead and extract the *first* filter from it.
+
+This feature makes nosdump interoperable with [nostreq](https://github.com/blakejakopovic/nostreq):
+
+```sh
+nostreq --kinds 1,7 | nosdump -R wss://relay.damus.io > dump.jsonl
+```
+
+> **Note**
+>
+> If a filter read from stdin and a filter specified by command line options have the same property, **the latter takes precedence of the former**.
+
+
 ## Usage
 ```
 Usage:   nosdump [options...] <relay-URLs...>
@@ -27,7 +74,7 @@ Options:
 
   -h, --help     - Show this help.
   -V, --version  - Show the version number for this program.
-  -n, --dry-run  - Just print parsed options instead of running actual dumping.
+  -n, --dry-run  - Just print parsed options instead of running actual dumping.  (Default: false)
 
 Filter options:
 
@@ -43,31 +90,9 @@ Filter options:
 
 Fetch options:
 
-  --skip-verification  - Skip event signature verification.
-```
+  --skip-verification  - Skip event signature verification.  (Default: false)
 
-## Examples
+Input options:
 
-To dump all events stored in the relay `wss://relay.damus.io` to a file:
-
-```sh
-nosdump wss://relay.damus.io > dump.jsonl
-```
-
-To dump all text events (kind:1) and reaction events (kind:7):
-
-```sh
-nosdump --kinds 1,7 wss://relay.damus.io > dump.jsonl
-```
-
-To dump all your events:
-
-```sh
-nosdump --authors <your pubkey (hex)> wss://relay.damus.io > dump.jsonl
-```
-
-To dump all reply events to you:
-
-```sh
-nosdump --kinds 1 --tag p:<your pubkey (hex)> wss://relay.damus.io > dump.jsonl
+  -R, --stdin-req  - Read stdin as a Nostr REQ message and extract the first filter from it.  (Default: false)
 ```
