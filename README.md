@@ -26,7 +26,8 @@ Description:
 Options:
 
   -h, --help     - Show this help.                            
-  -V, --version  - Show the version number for this program.  
+  -V, --version  - Show the version number for this program.
+  -n, --dry-run  - Just print parsed options instead of running actual dumping.
 
 Filter options:
 

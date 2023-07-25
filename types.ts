@@ -6,3 +6,7 @@ export type NosdumpParams = {
   fetchTimeRange: FetchTimeRangeFilter;
   fetchOptions: FetchAllOptions;
 };
+
+export type MiscOptions = {
+  dryRun?: boolean;
+};

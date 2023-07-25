@@ -7,7 +7,7 @@ import {
   ValidationError,
 } from "./deps.ts";
 
-import { NosdumpParams } from "./types.ts";
+import { MiscOptions, NosdumpParams } from "./types.ts";
 
 const kindType = ({ label, name, value }: ArgumentValue): number => {
   const n = Number(value);
@@ -61,7 +61,9 @@ const cleanupObj = <T extends Record<string, unknown>>(obj: T): T => {
   return obj;
 };
 
-export const parseInput = async (rawArgs: string[]): Promise<NosdumpParams> => {
+export const parseInput = async (
+  rawArgs: string[]
+): Promise<NosdumpParams & { miscOptions: MiscOptions }> => {
   const { args, options } = await new Command()
     .name("nosdump")
     .version("0.2.0")
@@ -69,6 +71,10 @@ export const parseInput = async (rawArgs: string[]): Promise<NosdumpParams> => {
     .usage("[options...] <relay-URLs...>")
     .type("kind", kindType)
     .type("tag-spec", tagSpecType)
+    .option(
+      "-n, --dry-run",
+      "Just print parsed options instead of running actual dumping."
+    )
     .group("Filter options")
     .option("--ids <ids:string[]>", "Comma separated list of target event ids.")
     .option(
@@ -122,5 +128,15 @@ export const parseInput = async (rawArgs: string[]): Promise<NosdumpParams> => {
     skipVerification: options.skipVerification,
   });
 
-  return { relayUrls: args, fetchFilter, fetchTimeRange, fetchOptions };
+  const miscOptions: MiscOptions = cleanupObj({
+    dryRun: options.dryRun,
+  });
+
+  return {
+    relayUrls: args,
+    fetchFilter,
+    fetchTimeRange,
+    fetchOptions,
+    miscOptions,
+  };
 };
