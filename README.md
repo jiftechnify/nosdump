@@ -1,4 +1,4 @@
-# nosdump  
+# nosdump
 
 [![deno.land shield]][deno.land link]
 
@@ -17,33 +17,33 @@ deno install --allow-net https://deno.land/x/nosdump@0.2.0/main.ts
 ## Usage
 ```
 Usage:   nosdump [options...] <relay-URLs...>
-Version: 0.2.0                               
+Version: 0.2.0
 
 Description:
 
-  A Tool to dump events stored in Nostr relays
+  A tool to dump events stored in Nostr relays
 
 Options:
 
-  -h, --help     - Show this help.                            
+  -h, --help     - Show this help.
   -V, --version  - Show the version number for this program.
   -n, --dry-run  - Just print parsed options instead of running actual dumping.
 
 Filter options:
 
-  --ids      <ids>       - Comma separated list of target event ids.                                      
-  --authors  <authors>   - Comma separated list of target author's pubkeys.                               
-  --kinds    <kinds>     - Comma separated list of target event kinds.                                    
-  --tag      <tag-spec>  - Tag query specifier. Syntax: <tag name>:<comma separated tag values>. You can  
-                           specify multiple --tag options.                                                
-  --search   <query>     - Search query. Note that if you use this filter against relays which don't      
-                           support NIP-50, no event will be fetched.                                      
-  --since    <unixtime>  - If specified, it fetches only events newer than the timestamp.                 
-  --until    <unixtime>  - If specified, it fetches only events older than the timestamp.                 
+  --ids      <ids>       - Comma separated list of target event ids.
+  --authors  <authors>   - Comma separated list of target author's pubkeys.
+  --kinds    <kinds>     - Comma separated list of target event kinds.
+  --tag      <tag-spec>  - Tag query specifier. Syntax: <tag name>:<comma separated tag values>. You can
+                           specify multiple --tag options.
+  --search   <query>     - Search query. Note that if you use this filter against relays which don't
+                           support NIP-50, no event will be fetched.
+  --since    <unixtime>  - Fetch only events newer than the timestamp if specified.
+  --until    <unixtime>  - Fetch only events older than the timestamp if specified.
 
 Fetch options:
 
-  --skip-verification  - If enabled, it skips event signature verification.  
+  --skip-verification  - Skip event signature verification.
 ```
 
 ## Examples

@@ -67,7 +67,7 @@ export const parseInput = async (
   const { args, options } = await new Command()
     .name("nosdump")
     .version("0.2.0")
-    .description("A Tool to dump events stored in Nostr relays")
+    .description("A tool to dump events stored in Nostr relays")
     .usage("[options...] <relay-URLs...>")
     .type("kind", kindType)
     .type("tag-spec", tagSpecType)
@@ -96,17 +96,14 @@ export const parseInput = async (
     )
     .option(
       "--since <unixtime:number>",
-      "If specified, it fetches only events newer than the timestamp."
+      "Fetch only events newer than the timestamp if specified."
     )
     .option(
       "--until <unixtime:number>",
-      "If specified, it fetches only events older than the timestamp."
+      "Fetch only events older than the timestamp if specified."
     )
     .group("Fetch options")
-    .option(
-      "--skip-verification",
-      "If enabled, it skips event signature verification."
-    )
+    .option("--skip-verification", "Skip event signature verification.")
     .arguments("<relay-URLs...>")
     .parse(rawArgs);
 
