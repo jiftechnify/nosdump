@@ -7,7 +7,6 @@ import {
   ValidationError,
   ZodError,
   fromZodError,
-  readAllSync,
   z,
 } from "./deps.ts";
 
@@ -90,12 +89,12 @@ const parseFilterFromText = (
   text: string,
   extractFromReq: boolean
 ): Result<[FetchFilter, FetchTimeRangeFilter], Error> => {
-  try {
-    // regard empty string as empty filter
-    if (text === "") {
-      Result.ok([{}, {}]);
-    }
+  // regard empty string as empty filter
+  if (text === "") {
+    return Result.ok([{}, {}]);
+  }
 
+  try {
     const rawJson = JSON.parse(text) as unknown;
 
     let rawFilter: unknown = rawJson;
@@ -140,7 +139,8 @@ const parseFilterFromText = (
 };
 
 export const parseInput = async (
-  rawArgs: string[]
+  rawArgs: string[],
+  stdinText: string
 ): Promise<NosdumpParams & { miscOptions: MiscOptions }> => {
   const { args, options } = await new Command()
     .name("nosdump")
@@ -197,7 +197,6 @@ export const parseInput = async (
     .parse(rawArgs);
 
   // read stdin and parse as a filter
-  const stdinText = new TextDecoder("utf-8").decode(readAllSync(Deno.stdin));
   const parseStdinRes = parseFilterFromText(stdinText, options.stdinReq);
   if (!parseStdinRes.isOk) {
     console.error("Couldn't parse stdin as Nostr filter:");
