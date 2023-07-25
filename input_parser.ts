@@ -144,7 +144,7 @@ export const parseInput = async (
 ): Promise<NosdumpParams & { miscOptions: MiscOptions }> => {
   const { args, options } = await new Command()
     .name("nosdump")
-    .version("0.2.0")
+    .version("0.3.0")
     .description("A tool to dump events stored in Nostr relays")
     .usage("[options...] <relay-URLs...>")
     .type("kind", kindType)
