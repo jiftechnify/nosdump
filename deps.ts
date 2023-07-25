@@ -1,3 +1,5 @@
+export { readAllSync } from "https://deno.land/std@0.195.0/streams/mod.ts";
+
 export {
   Command,
   ValidationError,
@@ -7,7 +9,11 @@ export type { ArgumentValue } from "https://deno.land/x/cliffy@v1.0.0-rc.2/comma
 export { NostrFetcher } from "npm:nostr-fetch@0.12.2";
 export type {
   AllEventsIterOptions,
+  FetchAllOptions,
   FetchFilter,
   FetchTimeRangeFilter,
-  FetchAllOptions,
 } from "npm:nostr-fetch@0.12.2";
+
+export { ZodError, z } from "https://deno.land/x/zod@v3.21.4/mod.ts";
+
+export { fromZodError } from "npm:zod-validation-error@1.3.1";
