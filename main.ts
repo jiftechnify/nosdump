@@ -1,4 +1,4 @@
-import { readAllSync } from "./deps.ts";
+import { getUnixTime, readAllSync } from "./deps.ts";
 import { parseInput } from "./input_parser.ts";
 import { dumpNostrEvents } from "./mod.ts";
 
@@ -8,7 +8,13 @@ const stdinText = !Deno.isatty(Deno.stdin.rid)
   ? new TextDecoder("utf-8").decode(readAllSync(Deno.stdin))
   : "";
 
-const { miscOptions, ...params } = await parseInput(Deno.args, stdinText);
+const currUnixtimeSec = getUnixTime(new Date());
+
+const { miscOptions, ...params } = await parseInput(
+  Deno.args,
+  stdinText,
+  currUnixtimeSec
+);
 
 if (miscOptions.dryRun) {
   console.log("Parsed options:");
