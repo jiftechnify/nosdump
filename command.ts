@@ -1,10 +1,14 @@
 import {
   ArgumentValue,
   Command,
+  CompletionsCommand,
+  DenoLandProvider,
   Duration,
   FetchAllOptions,
   FetchFilter,
   FetchTimeRangeFilter,
+  GithubProvider,
+  UpgradeCommand,
   ValidationError,
   ZodError,
   fromZodError,
@@ -12,61 +16,29 @@ import {
   isDateValid,
   nip19,
   parseISO,
+  readAllSync,
   z,
 } from "./deps.ts";
+import { dumpNostrEvents } from "./dump.ts";
 
 import { MiscOptions, NosdumpParams, Result } from "./types.ts";
 
-export const parseInput = async (
-  rawArgs: string[],
-  stdinText: string,
-  currUnixtimeSec: number
-): Promise<NosdumpParams & { miscOptions: MiscOptions }> => {
-  const { args, options } = await cmd.parse(rawArgs);
-
-  // read stdin and parse as a filter
-  const parseStdinRes = parseFilterFromText(stdinText, options.stdinReq);
-  if (!parseStdinRes.isOk) {
-    console.error("Failed to parse stdin as Nostr filter:");
-    console.error(parseStdinRes.err.message);
-    Deno.exit(1);
-  }
-  const [stdinFilter, stdinTimeRange] = parseStdinRes.val;
-
-  // construct filter from options
-  const parseOptsRes = parseFilterFromOptions(options, currUnixtimeSec);
-  if (!parseOptsRes.isOk) {
-    console.error("Failed to parse options:");
-    for (const err of parseOptsRes.err) {
-      console.error(err);
-    }
-    Deno.exit(1);
-  }
-  const [optFilter, optTimeRange] = parseOptsRes.val;
-
-  // other options
-  const fetchOptions: FetchAllOptions = deleteUndefinedProps({
-    skipVerification: options.skipVerification,
-  });
-  const miscOptions: MiscOptions = deleteUndefinedProps({
-    dryRun: options.dryRun,
-  });
-
-  // filter props specified by CLI option overrides props parsed from stdin.
-  return {
-    relayUrls: args,
-    fetchFilter: { ...stdinFilter, ...optFilter },
-    fetchTimeRange: { ...stdinTimeRange, ...optTimeRange },
-    fetchOptions,
-    miscOptions,
-  };
-};
-
-const cmd = new Command()
+export const nosdumpCommand = new Command()
   .name("nosdump")
   .version("0.3.0")
   .description("A tool to dump events stored in Nostr relays")
   .usage("[options...] <relay-URLs...>")
+  .command("completions", new CompletionsCommand())
+  .command(
+    "upgrade",
+    new UpgradeCommand({
+      provider: [
+        new DenoLandProvider({ name: "nosdump" }),
+        new GithubProvider({ repository: "jiftechnify/nosdump" }),
+      ],
+    })
+  )
+  .reset()
   .type("kind", kindType)
   .type("tag-spec", tagSpecType)
   .option(
@@ -113,7 +85,88 @@ const cmd = new Command()
       default: false,
     }
   )
-  .arguments("<relay-URLs...>");
+  .arguments("<relay-URLs...>")
+  .action((options, ...args) => {
+    executeNosdump(options, args);
+  });
+
+type CommandOptions = Parameters<
+  Parameters<typeof nosdumpCommand.action>[0]
+>[0];
+
+async function executeNosdump(
+  cmdOptions: CommandOptions,
+  cmdArgs: [string, ...string[]]
+) {
+  // if Deno.isatty(Deno.stdin.rid) returns false, stdin is connected to a pipe.
+  // cf. https://zenn.dev/kawarimidoll/articles/5559a185156bf4#deno.stdin%E3%81%AE%E5%87%A6%E7%90%86
+  const stdinText = !Deno.isatty(Deno.stdin.rid)
+    ? new TextDecoder("utf-8").decode(readAllSync(Deno.stdin))
+    : "";
+
+  const currUnixtimeSec = getUnixTime(new Date());
+
+  const { miscOptions, ...params } = parseInput(
+    cmdOptions,
+    cmdArgs,
+    stdinText,
+    currUnixtimeSec
+  );
+
+  if (miscOptions.dryRun) {
+    console.log("Parsed options:");
+    console.log(params);
+    Deno.exit(0);
+  }
+
+  await dumpNostrEvents(params);
+}
+
+function parseInput(
+  cmdOptions: CommandOptions,
+  cmdArgs: [string, ...string[]],
+  stdinText: string,
+  currUnixtimeSec: number
+): NosdumpParams & { miscOptions: MiscOptions } {
+  // const { args, options } = await command.parse(rawArgs);
+
+  // read stdin and parse as a filter
+  const parseStdinRes = parseFilterFromText(stdinText, cmdOptions.stdinReq);
+  if (!parseStdinRes.isOk) {
+    console.error("Failed to parse stdin as Nostr filter:");
+    console.error(parseStdinRes.err.message);
+    Deno.exit(1);
+  }
+  const [stdinFilter, stdinTimeRange] = parseStdinRes.val;
+
+  // construct filter from options
+  const parseOptsRes = parseFilterFromOptions(cmdOptions, currUnixtimeSec);
+  if (!parseOptsRes.isOk) {
+    console.error("Failed to parse options:");
+    for (const err of parseOptsRes.err) {
+      console.error(err);
+    }
+    Deno.exit(1);
+  }
+  const [optFilter, optTimeRange] = parseOptsRes.val;
+
+  // other options
+  const fetchOptions: FetchAllOptions = deleteUndefinedProps({
+    skipVerification: cmdOptions.skipVerification,
+  });
+  const miscOptions: MiscOptions = deleteUndefinedProps({
+    dryRun: cmdOptions.dryRun,
+  });
+
+  // filter props specified by CLI option overrides props parsed from stdin.
+  return {
+    relayUrls: cmdArgs,
+    fetchFilter: { ...stdinFilter, ...optFilter },
+    fetchTimeRange: { ...stdinTimeRange, ...optTimeRange },
+    fetchOptions,
+    miscOptions,
+  };
+}
 
 /**
  * Parse text as Nostr filter.
