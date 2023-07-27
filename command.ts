@@ -317,13 +317,16 @@ type TagSpec = {
   values: string[];
 };
 
+const tagSpecRegex = /^(.):(.+)$/;
+
 function tagSpecType({ value }: ArgumentValue): TagSpec {
-  const [tagName, tagVals] = value.split(":");
-  if (tagName === undefined || tagVals === undefined) {
+  const match = value.match(tagSpecRegex);
+  if (match === null) {
     throw new ValidationError(
       `Tag spec "${value}" is malformed. It must follow "<tag name>:<comma separated list of tag values>" format.`
     );
   }
+  const [, tagName, tagVals] = match;
   return {
     name: tagName,
     values: tagVals.split(",").map((v) => v.trim()),
