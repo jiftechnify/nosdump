@@ -12,7 +12,7 @@ export const dumpNostrEvents = async ({
     relayUrls,
     fetchFilter,
     fetchTimeRange,
-    fetchOptions
+    { enableBackpressure: true, ...fetchOptions }
   )) {
     console.log(JSON.stringify(ev));
   }
