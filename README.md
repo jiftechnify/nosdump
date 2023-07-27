@@ -11,7 +11,7 @@ A command line tool which dumps events stored in [Nostr](https://github.com/nost
 [Install Deno](https://deno.land/manual/getting_started/installation) and run:
 
 ```sh
-deno install --allow-net https://deno.land/x/nosdump@0.3.0/main.ts
+deno install --allow-net https://deno.land/x/nosdump@0.4.0/main.ts
 ```
 
 ## Examples
@@ -131,7 +131,7 @@ nostreq --kinds 1,7 | nosdump -R wss://relay.damus.io > dump.jsonl
 ## Usage
 ```
 Usage:   nosdump [options...] <relay-URLs...>
-Version: 0.3.0
+Version: 0.4.0
 
 Description:
 
