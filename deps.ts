@@ -2,9 +2,9 @@ export { readAllSync } from "https://deno.land/std@0.195.0/streams/mod.ts";
 
 export {
   Command,
-  ValidationError,
   CompletionsCommand,
   UpgradeCommand,
+  ValidationError,
 } from "https://deno.land/x/cliffy@v1.0.0-rc.2/command/mod.ts";
 export type { ArgumentValue } from "https://deno.land/x/cliffy@v1.0.0-rc.2/command/mod.ts";
 
