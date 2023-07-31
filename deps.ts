@@ -16,14 +16,13 @@ export {
 export { NostrFetcher } from "npm:nostr-fetch@0.12.2";
 export type {
   AllEventsIterOptions,
-  FetchAllOptions,
   FetchFilter,
   FetchTimeRangeFilter,
 } from "npm:nostr-fetch@0.12.2";
 
 export { nip19 } from "npm:nostr-tools@1.13.1";
 
-export { ZodError, z } from "https://deno.land/x/zod@v3.21.4/mod.ts";
+export { z, ZodError } from "https://deno.land/x/zod@v3.21.4/mod.ts";
 
 export { fromZodError } from "npm:zod-validation-error@1.3.1";
 
