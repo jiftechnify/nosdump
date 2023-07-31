@@ -1,10 +1,14 @@
-import { FetchAllOptions, FetchFilter, FetchTimeRangeFilter } from "./deps.ts";
+import {
+  AllEventsIterOptions,
+  FetchFilter,
+  FetchTimeRangeFilter,
+} from "./deps.ts";
 
 export type NosdumpParams = {
   relayUrls: string[];
   fetchFilter: FetchFilter;
   fetchTimeRange: FetchTimeRangeFilter;
-  fetchOptions: FetchAllOptions;
+  fetchOptions: AllEventsIterOptions;
 };
 
 export type MiscOptions = {
