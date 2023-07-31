@@ -16,3 +16,5 @@ jobs:
           deno-version: v1.x # Run with latest stable Deno.
 
       - run: deno info
+
+      - run: echo $GITHUB_WORKSPACE
