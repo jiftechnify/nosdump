@@ -1,6 +1,6 @@
 import {
-  NosdumpCmdOptions,
   kindType,
+  NosdumpCmdOptions,
   parseInput,
   tagSpecType,
 } from "./command.ts";
@@ -26,7 +26,7 @@ Deno.test("parseInput", async (t) => {
       defaultCmdOpts,
       ["wss://foo.example.com", "wss://bar.example.com"],
       "",
-      0
+      0,
     );
 
     assert(res.isOk);
@@ -77,7 +77,7 @@ Deno.test("parseInput", async (t) => {
       },
       dummyRelayUrls,
       "",
-      0
+      0,
     );
 
     assert(res.isOk);
@@ -131,7 +131,7 @@ Deno.test("parseInput", async (t) => {
         since: 100,
         until: 200,
       }),
-      0
+      0,
     );
 
     assert(res.isOk);
@@ -176,7 +176,7 @@ Deno.test("parseInput", async (t) => {
           kinds: [1],
         },
       ]),
-      0
+      0,
     );
 
     assert(res.isOk);
@@ -205,7 +205,7 @@ Deno.test("parseInput", async (t) => {
         since: 50,
         until: 200,
       }),
-      0
+      0,
     );
 
     assert(res.isOk);
@@ -237,7 +237,7 @@ Deno.test("parseInput", async (t) => {
       },
       dummyRelayUrls,
       "",
-      0
+      0,
     );
 
     assert(res.isOk);
@@ -276,7 +276,7 @@ Deno.test("parseInput", async (t) => {
       },
       dummyRelayUrls,
       "",
-      0
+      0,
     );
 
     assert(res.isOk);
@@ -299,7 +299,7 @@ Deno.test("parseInput", async (t) => {
       },
       dummyRelayUrls,
       "",
-      0
+      0,
     );
 
     assert(res.isOk);
@@ -331,7 +331,7 @@ Deno.test("parseInput", async (t) => {
       },
       dummyRelayUrls,
       "",
-      0
+      0,
     );
 
     assert(res.isOk);
@@ -354,7 +354,7 @@ Deno.test("parseInput", async (t) => {
       },
       dummyRelayUrls,
       "",
-      0
+      0,
     );
 
     assert(res.isOk);
@@ -378,7 +378,7 @@ Deno.test("parseInput", async (t) => {
       },
       dummyRelayUrls,
       "",
-      0
+      0,
     );
 
     assert(res.isOk);
@@ -397,7 +397,7 @@ Deno.test("parseInput", async (t) => {
       },
       dummyRelayUrls,
       "",
-      0
+      0,
     );
 
     assert(res.isOk);
@@ -418,7 +418,7 @@ Deno.test("parseInput", async (t) => {
         },
         dummyRelayUrls,
         "",
-        0
+        0,
       );
       const sinceOffsetSec =
         parseISO("2022-01-01T00:00:00").getTimezoneOffset() * 60;
@@ -430,7 +430,7 @@ Deno.test("parseInput", async (t) => {
         since: utcUnixtimes.newYear2022 + sinceOffsetSec,
         until: utcUnixtimes.newYear2023 + untilOffsetSec,
       });
-    }
+    },
   );
 
   await t.step("relative time as timestamp", () => {
@@ -443,7 +443,7 @@ Deno.test("parseInput", async (t) => {
       },
       dummyRelayUrls,
       "",
-      now
+      now,
     );
 
     assert(res.isOk);
@@ -465,7 +465,7 @@ Deno.test("parseInput", async (t) => {
         { ...defaultCmdOpts, ids: [i] },
         dummyRelayUrls,
         "",
-        0
+        0,
       );
       assert(!res.isOk);
     }
@@ -483,7 +483,7 @@ Deno.test("parseInput", async (t) => {
         { ...defaultCmdOpts, authors: [i] },
         dummyRelayUrls,
         "",
-        0
+        0,
       );
       assert(!res.isOk);
     }
@@ -501,7 +501,7 @@ Deno.test("parseInput", async (t) => {
         { ...defaultCmdOpts, since: i },
         dummyRelayUrls,
         "",
-        0
+        0,
       );
       assert(!res.isOk);
     }
@@ -518,7 +518,7 @@ Deno.test("parseInput", async (t) => {
         { ...defaultCmdOpts },
         dummyRelayUrls,
         JSON.stringify(i),
-        0
+        0,
       );
       assert(!res.isOk);
     }
@@ -537,11 +537,11 @@ Deno.test("parseInput", async (t) => {
           { ...defaultCmdOpts, stdinReq: true },
           dummyRelayUrls,
           JSON.stringify(i),
-          0
+          0,
         );
         assert(!res.isOk);
       }
-    }
+    },
   );
 });
 
@@ -551,7 +551,7 @@ Deno.test("kindType validator", async (t) => {
     for (const i of inputs) {
       assertEquals(
         kindType({ value: i, label: "", name: "", type: "" }),
-        Number(i)
+        Number(i),
       );
     }
   });

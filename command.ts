@@ -7,17 +7,17 @@ import {
   Duration,
   FetchFilter,
   FetchTimeRangeFilter,
-  GithubProvider,
-  UpgradeCommand,
-  ValidationError,
-  ZodError,
   fromZodError,
   getUnixTime,
+  GithubProvider,
   isDateValid,
   nip19,
   parseISO,
   readAllSync,
+  UpgradeCommand,
+  ValidationError,
   z,
+  ZodError,
 } from "./deps.ts";
 import { dumpNostrEvents } from "./dump.ts";
 
@@ -36,7 +36,7 @@ export const nosdumpCommand = new Command()
         new DenoLandProvider({ name: "nosdump" }),
         new GithubProvider({ repository: "jiftechnify/nosdump" }),
       ],
-    })
+    }),
   )
   .reset()
   .type("kind", kindType)
@@ -44,34 +44,34 @@ export const nosdumpCommand = new Command()
   .option(
     "-n, --dry-run",
     "Just print parsed options instead of running actual dumping.",
-    { default: false }
+    { default: false },
   )
   .group("Filter options")
   .option("--ids <ids:string[]>", "Comma separated list of target event ids.")
   .option(
     "--authors <authors:string[]>",
-    "Comma separated list of target author's pubkeys."
+    "Comma separated list of target author's pubkeys.",
   )
   .option(
     "--kinds <kinds:kind[]>",
-    "Comma separated list of target event kinds."
+    "Comma separated list of target event kinds.",
   )
   .option(
     "--tag <tag-spec:tag-spec>",
     "Tag query specifier. Syntax: <tag name>:<comma separated tag values>. You can specify multiple --tag options.",
-    { collect: true }
+    { collect: true },
   )
   .option(
     "--search <query:string>",
-    "Search query. Note that if you use this filter against relays which don't support NIP-50, no event will be fetched."
+    "Search query. Note that if you use this filter against relays which don't support NIP-50, no event will be fetched.",
   )
   .option(
     "--since <time-spec:string>",
-    "Fetch only events newer than the timestamp if specified."
+    "Fetch only events newer than the timestamp if specified.",
   )
   .option(
     "--until <time-spec:string>",
-    "Fetch only events older than the timestamp if specified."
+    "Fetch only events older than the timestamp if specified.",
   )
   .group("Fetch options")
   .option("--skip-verification", "Skip event signature verification.", {
@@ -83,7 +83,7 @@ export const nosdumpCommand = new Command()
     "Read stdin as a Nostr REQ message and extract the first filter from it.",
     {
       default: false,
-    }
+    },
   )
   .arguments("<relay-URLs...>")
   .action((options, ...args) => {
@@ -96,7 +96,7 @@ export type NosdumpCmdOptions = Parameters<
 
 async function executeNosdump(
   cmdOptions: NosdumpCmdOptions,
-  cmdArgs: [string, ...string[]]
+  cmdArgs: [string, ...string[]],
 ) {
   // if Deno.isatty(Deno.stdin.rid) returns false, stdin is connected to a pipe.
   // cf. https://zenn.dev/kawarimidoll/articles/5559a185156bf4#deno.stdin%E3%81%AE%E5%87%A6%E7%90%86
@@ -110,7 +110,7 @@ async function executeNosdump(
     cmdOptions,
     cmdArgs,
     stdinText,
-    currUnixtimeSec
+    currUnixtimeSec,
   );
   if (!parseInputRes.isOk) {
     console.error(parseInputRes.err.header + ":");
@@ -139,7 +139,7 @@ export function parseInput(
   cmdOptions: NosdumpCmdOptions,
   cmdArgs: [string, ...string[]],
   stdinText: string,
-  currUnixtimeSec: number
+  currUnixtimeSec: number,
 ): Result<NosdumpParams & { miscOptions: MiscOptions }, ParseInputErrVal> {
   // read stdin and parse as a filter
   const parseStdinRes = parseFilterFromText(stdinText, cmdOptions.stdinReq);
@@ -185,7 +185,7 @@ export function parseInput(
  */
 const parseFilterFromText = (
   text: string,
-  extractFromReq: boolean
+  extractFromReq: boolean,
 ): Result<[FetchFilter, FetchTimeRangeFilter], Error> => {
   // regard empty string as empty filter
   if (text === "") {
@@ -254,7 +254,7 @@ type FilterCmdOpts = {
  */
 const parseFilterFromOptions = (
   filterOpts: FilterCmdOpts,
-  currUnixtimeSec: number
+  currUnixtimeSec: number,
 ): Result<[FetchFilter, FetchTimeRangeFilter], string[]> => {
   const errs: string[] = [];
   const fetchFilter = {} as FetchFilter;
@@ -317,7 +317,7 @@ export function kindType({ label, name, value }: ArgumentValue): number {
   const n = Number(value);
   if (isNaN(n) || n < 0 || !Number.isInteger(n)) {
     throw new ValidationError(
-      `${label} "${name}" must be non-negative integer, but got "${value}".`
+      `${label} "${name}" must be non-negative integer, but got "${value}".`,
     );
   }
   return n;
@@ -334,7 +334,7 @@ export function tagSpecType({ value }: ArgumentValue): TagSpec {
   const match = value.match(tagSpecRegex);
   if (match === null) {
     throw new ValidationError(
-      `Tag spec "${value}" is malformed. It must follow "<tag name>:<comma separated list of tag values>" format.`
+      `Tag spec "${value}" is malformed. It must follow "<tag name>:<comma separated list of tag values>" format.`,
     );
   }
   const [, tagName, tagVals] = match;
@@ -345,7 +345,7 @@ export function tagSpecType({ value }: ArgumentValue): TagSpec {
 }
 
 const mergeTagSpecs = (
-  tagSpecs: TagSpec[]
+  tagSpecs: TagSpec[],
 ): Result<Record<string, string[]>, string[]> => {
   const mergedByName = new Map<string, Set<string>>();
   for (const { name, values } of tagSpecs) {
@@ -412,7 +412,7 @@ const nonTagFilterSchema = z
 
 const tagQuerySchema = z.record(
   z.string().startsWith("#").length(2),
-  z.string().array()
+  z.string().array(),
 );
 
 const regex32BytesHex = /^[a-f0-9]{64}$/;
@@ -469,7 +469,7 @@ const toHexPubkey = (s: string): Result<string, string> => {
  */
 const parseTimestampSpec = (
   s: string,
-  currUnixtime: number
+  currUnixtime: number,
 ): Result<number, string> => {
   // try to parse as unixtime
   if (/^\d+$/.test(s)) {
@@ -508,6 +508,6 @@ const mergeResultArray = <T, E>(results: Result<T, E>[]): Result<T[], E[]> => {
         }
       }
     },
-    { isOk: true, val: [] } as Result<T[], E[]>
+    { isOk: true, val: [] } as Result<T[], E[]>,
   );
 };
