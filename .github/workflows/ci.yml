@@ -4,8 +4,10 @@ on:
   pull_request:
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-22.04
+    env:
+      DENO_DIR: /home/runner/.cache/deno
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
