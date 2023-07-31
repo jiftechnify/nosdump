@@ -1,13 +1,14 @@
 # nosdump
 
-[![deno.land shield]][deno.land link]
+[![deno.land](https://shield.deno.dev/x/nosdump)](https://deno.land/x/nosdump)
 
-[deno.land shield]: https://shield.deno.dev/x/nosdump
-[deno.land link]: https://deno.land/x/nosdump
-
-A command line tool which dumps events stored in [Nostr](https://github.com/nostr-protocol/nostr) relays, in [JSON-Lines](https://jsonlines.org/) format (also known as [NDJSON](http://ndjson.org/)).
+A command line tool which dumps events stored in
+[Nostr](https://github.com/nostr-protocol/nostr) relays, in
+[JSON-Lines](https://jsonlines.org/) format (also known as
+[NDJSON](http://ndjson.org/)).
 
 ## Installation
+
 [Install Deno](https://deno.land/manual/getting_started/installation) and run:
 
 ```sh
@@ -15,6 +16,7 @@ deno install --allow-net https://deno.land/x/nosdump@0.4.0/main.ts
 ```
 
 ## Examples
+
 ### Basics
 
 Dump all events stored in the relay `wss://relay.damus.io` to a file:
@@ -55,7 +57,6 @@ You can use following formats to refer **events**:
 - NIP-19 identifer for event (`note1...` / `nevent1...`)
 - `nostr:` URI for event (`nostr:note1...` / `nostr:nevent1...`)
 
-
 ```sh
 # They are all valid!
 nosdump --ids c824e1184d4f3660097d8299632ac723f5bfaea1eb569867f4924f2f0713a321 wss://relay.damus.io
@@ -90,9 +91,11 @@ You can use following formats to specify **timestamps**:
 
 - Unixtime in seconds
 - ISO 8601 datetime string (e.g. `2023-07-19T23:06:16`)
-    + If you don't specify a timezone explicitly, it will be interpreted as **local time**.
+  - If you don't specify a timezone explicitly, it will be interpreted as
+    **local time**.
 - Relative time represented by a duration string (e.g. `6h`, means 6 hours ago)
-    + It uses [duration.js](https://deno.land/x/durationjs@v4.1.0) to parse duration strings.
+  - It uses [duration.js](https://deno.land/x/durationjs@v4.1.0) to parse
+    duration strings.
 
 ```sh
 # Unixtime in seconds
@@ -109,15 +112,19 @@ nosdump --since 1h --until 30m wss://relay.damus.io
 ```
 
 ### Read a filter from stdin
-nosdump parses stdin as a Nostr filter by default, so the following command works as expected:
+
+nosdump parses stdin as a Nostr filter by default, so the following command
+works as expected:
 
 ```sh
 echo '{ "kinds": [1, 7] }' | nosdump wss://relay.damus.io > dump.jsonl
 ```
 
-If `-R` (`--stdin-req`) flag is specified, nosdump parses stdin as *a REQ message* instead and extract the *first* filter from it.
+If `-R` (`--stdin-req`) flag is specified, nosdump parses stdin as _a REQ
+message_ instead and extract the _first_ filter from it.
 
-This feature makes nosdump interoperable with [nostreq](https://github.com/blakejakopovic/nostreq):
+This feature makes nosdump interoperable with
+[nostreq](https://github.com/blakejakopovic/nostreq):
 
 ```sh
 nostreq --kinds 1,7 | nosdump -R wss://relay.damus.io > dump.jsonl
@@ -125,10 +132,11 @@ nostreq --kinds 1,7 | nosdump -R wss://relay.damus.io > dump.jsonl
 
 > **Note**
 >
-> If a filter read from stdin and a filter specified by command line options have the same property, **the latter takes precedence of the former**.
-
+> If a filter read from stdin and a filter specified by command line options
+> have the same property, **the latter takes precedence of the former**.
 
 ## Usage
+
 ```
 Usage:   nosdump [options...] <relay-URLs...>
 Version: 0.4.0
