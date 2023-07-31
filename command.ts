@@ -1,10 +1,10 @@
 import {
+  AllEventsIterOptions,
   ArgumentValue,
   Command,
   CompletionsCommand,
   DenoLandProvider,
   Duration,
-  FetchAllOptions,
   FetchFilter,
   FetchTimeRangeFilter,
   GithubProvider,
@@ -90,12 +90,12 @@ export const nosdumpCommand = new Command()
     executeNosdump(options, args);
   });
 
-type CommandOptions = Parameters<
+export type NosdumpCmdOptions = Parameters<
   Parameters<typeof nosdumpCommand.action>[0]
 >[0];
 
 async function executeNosdump(
-  cmdOptions: CommandOptions,
+  cmdOptions: NosdumpCmdOptions,
   cmdArgs: [string, ...string[]]
 ) {
   // if Deno.isatty(Deno.stdin.rid) returns false, stdin is connected to a pipe.
@@ -106,12 +106,20 @@ async function executeNosdump(
 
   const currUnixtimeSec = getUnixTime(new Date());
 
-  const { miscOptions, ...params } = parseInput(
+  const parseInputRes = parseInput(
     cmdOptions,
     cmdArgs,
     stdinText,
     currUnixtimeSec
   );
+  if (!parseInputRes.isOk) {
+    console.error(parseInputRes.err.header + ":");
+    for (const msg of parseInputRes.err.msgs) {
+      console.error(msg);
+    }
+    Deno.exit(1);
+  }
+  const { miscOptions, ...params } = parseInputRes.val;
 
   if (miscOptions.dryRun) {
     console.log("Parsed options:");
@@ -122,36 +130,39 @@ async function executeNosdump(
   await dumpNostrEvents(params);
 }
 
-function parseInput(
-  cmdOptions: CommandOptions,
+type ParseInputErrVal = {
+  header: string;
+  msgs: string[];
+};
+
+export function parseInput(
+  cmdOptions: NosdumpCmdOptions,
   cmdArgs: [string, ...string[]],
   stdinText: string,
   currUnixtimeSec: number
-): NosdumpParams & { miscOptions: MiscOptions } {
-  // const { args, options } = await command.parse(rawArgs);
-
+): Result<NosdumpParams & { miscOptions: MiscOptions }, ParseInputErrVal> {
   // read stdin and parse as a filter
   const parseStdinRes = parseFilterFromText(stdinText, cmdOptions.stdinReq);
   if (!parseStdinRes.isOk) {
-    console.error("Failed to parse stdin as Nostr filter:");
-    console.error(parseStdinRes.err.message);
-    Deno.exit(1);
+    return Result.err({
+      header: "Failed to parse stdin as Nostr filter",
+      msgs: [parseStdinRes.err.message],
+    });
   }
   const [stdinFilter, stdinTimeRange] = parseStdinRes.val;
 
   // construct filter from options
   const parseOptsRes = parseFilterFromOptions(cmdOptions, currUnixtimeSec);
   if (!parseOptsRes.isOk) {
-    console.error("Failed to parse options:");
-    for (const err of parseOptsRes.err) {
-      console.error(err);
-    }
-    Deno.exit(1);
+    return Result.err({
+      header: "Failed to parse options",
+      msgs: parseOptsRes.err,
+    });
   }
   const [optFilter, optTimeRange] = parseOptsRes.val;
 
   // other options
-  const fetchOptions: FetchAllOptions = deleteUndefinedProps({
+  const fetchOptions: AllEventsIterOptions = deleteUndefinedProps({
     skipVerification: cmdOptions.skipVerification,
   });
   const miscOptions: MiscOptions = deleteUndefinedProps({
@@ -159,13 +170,13 @@ function parseInput(
   });
 
   // filter props specified by CLI option overrides props parsed from stdin.
-  return {
+  return Result.ok({
     relayUrls: cmdArgs,
     fetchFilter: { ...stdinFilter, ...optFilter },
     fetchTimeRange: { ...stdinTimeRange, ...optTimeRange },
     fetchOptions,
     miscOptions,
-  };
+  });
 }
 
 /**
@@ -225,7 +236,7 @@ const parseFilterFromText = (
   }
 };
 
-type FilterOpts = {
+type FilterCmdOpts = {
   ids?: string[] | undefined;
   authors?: string[] | undefined;
   kinds?: number[] | undefined;
@@ -242,7 +253,7 @@ type FilterOpts = {
  * and reports all errors if there are unacceptable values.
  */
 const parseFilterFromOptions = (
-  filterOpts: FilterOpts,
+  filterOpts: FilterCmdOpts,
   currUnixtimeSec: number
 ): Result<[FetchFilter, FetchTimeRangeFilter], string[]> => {
   const errs: string[] = [];
@@ -302,11 +313,11 @@ const parseFilterFromOptions = (
   ]);
 };
 
-function kindType({ label, name, value }: ArgumentValue): number {
+export function kindType({ label, name, value }: ArgumentValue): number {
   const n = Number(value);
-  if (isNaN(n) || n < 0) {
+  if (isNaN(n) || n < 0 || !Number.isInteger(n)) {
     throw new ValidationError(
-      `${label} "${name}" must be non-negative number, but got "${value}".`
+      `${label} "${name}" must be non-negative integer, but got "${value}".`
     );
   }
   return n;
@@ -319,7 +330,7 @@ type TagSpec = {
 
 const tagSpecRegex = /^(.):(.+)$/;
 
-function tagSpecType({ value }: ArgumentValue): TagSpec {
+export function tagSpecType({ value }: ArgumentValue): TagSpec {
   const match = value.match(tagSpecRegex);
   if (match === null) {
     throw new ValidationError(

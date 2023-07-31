@@ -16,7 +16,6 @@ export {
 export { NostrFetcher } from "npm:nostr-fetch@0.12.2";
 export type {
   AllEventsIterOptions,
-  FetchAllOptions,
   FetchFilter,
   FetchTimeRangeFilter,
 } from "npm:nostr-fetch@0.12.2";
