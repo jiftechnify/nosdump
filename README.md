@@ -9,11 +9,18 @@ A command line tool which dumps events stored in
 
 ## Installation
 
+### With `deno install` (recommended)
+
 [Install Deno](https://deno.land/manual/getting_started/installation) and run:
 
 ```sh
 deno install --allow-net https://deno.land/x/nosdump@0.4.0/main.ts
 ```
+
+### With pre-built binaries (easy)
+
+Download pre-built binaries from the
+[releases](https://github.com/jiftechnify/nosdump/releases) page.
 
 ## Examples
 
@@ -27,7 +34,7 @@ nosdump wss://relay.damus.io > dump.jsonl
 
 Dump all text events (kind:1) and reaction events (kind:7):
 
-```sh
+```shhttps://github.com/jiftechnify/nosdump/releases
 nosdump --kinds 1,7 wss://relay.damus.io > dump.jsonl
 ```
 
