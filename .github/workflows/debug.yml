@@ -2,9 +2,6 @@ name: Debug
 
 on: 
   workflow_dispatch:
-  push:
-    tags:
-      - "*"
 
 jobs:
   build:
@@ -12,19 +9,3 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-
-      - name: Check if branch is main
-        env:
-          TARGET: debug-gha
-        run: |
-          BRANCHES=$(git branch --contains ${{ github.ref_name }} | tr -d '*')
-          for BRANCH in $BRANCHES; do
-            echo $BRANCH
-            if [[ "$BRANCH" == "${{ env.TARGET }}" ]]; then
-              exit 0
-            fi
-          done
-          exit 1
-
-      - run: echo "OK"
-
