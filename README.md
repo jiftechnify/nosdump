@@ -9,11 +9,18 @@ A command line tool which dumps events stored in
 
 ## Installation
 
+### With `deno install` (recommended)
+
 [Install Deno](https://deno.land/manual/getting_started/installation) and run:
 
 ```sh
 deno install --allow-net https://deno.land/x/nosdump@0.4.0/main.ts
 ```
+
+### With pre-built binaries (easy)
+
+Download pre-built binaries from the
+[releases](https://github.com/jiftechnify/nosdump/releases) page.
 
 ## Examples
 
