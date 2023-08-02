@@ -1,0 +1,52 @@
+name: Release on tag push
+
+on: 
+  push:
+    tags:
+      - "*"
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    env:
+      DENO_DIR: /home/runner/.cache/deno
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x # Run with latest stable Deno.
+
+      - name: Use dependency cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.DENO_DIR }}
+          key: ${{ hashFiles('deno.lock') }}
+
+      - name: Run static checks(type check, format, lint)
+        run: deno task static-checks
+
+      - name: Run tests
+        run: deno test
+
+      - name: Build executables
+        run: |
+          NON_WIN_ARCHES=(x86_64-unknown-linux-gnu x86_64-apple-darwin aarch64-apple-darwin)
+          for ARCH in "${NON_WIN_ARCHES[@]}"; do
+            deno compile --target $ARCH -o nosdump --allow-net main.ts
+            zip -r "nosdump-${ARCH}" nosdump
+          done
+
+          WIN_ARCHES=(x86_64-pc-windows-msvc)
+          for ARCH in "${WIN_ARCHES[@]}"; do
+            deno compile --target $ARCH -o nosdump.exe --allow-net main.ts
+            zip -r "nosdump-${ARCH}" nosdump.exe
+          done
+      
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: nosdump-*.zip
+
