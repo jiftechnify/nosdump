@@ -34,7 +34,7 @@ nosdump wss://relay.damus.io > dump.jsonl
 
 Dump all text events (kind:1) and reaction events (kind:7):
 
-```shhttps://github.com/jiftechnify/nosdump/releases
+```sh
 nosdump --kinds 1,7 wss://relay.damus.io > dump.jsonl
 ```
 
