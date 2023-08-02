@@ -19,7 +19,8 @@ jobs:
         run: |
           BRANCHES=$(git branch --contains ${{ github.ref_name }} | tr -d '*')
           for BRANCH in $BRANCHES; do
-            if [[ $BRANCH == ${{ env.TARGET }} ]]; then
+            echo $BRANCH
+            if [[ "$BRANCH" == "${{ env.TARGET }}" ]]; then
               exit 0
             fi
           done
