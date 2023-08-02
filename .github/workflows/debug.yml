@@ -10,11 +10,5 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Setup Deno
-        uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.x # Run with latest stable Deno.
-
-      - run: deno info
-
-      - run: echo $GITHUB_WORKSPACE
+      - name: Dump github var
+        run: echo ${{ toJson(github) }}
