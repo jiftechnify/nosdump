@@ -13,5 +13,17 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Dump github var
-        run: echo "${{ toJson(github) }}"
+      - name: Check if branch is main
+        env:
+          TARGET: debug-gha
+        run: |
+          BRANCHES=$(git branch --contains ${{ github.ref_name }} | tr -d '*')
+          for BRANCH in $BRANCHES; do
+            if [[ $BRANCH == ${{ env.TARGET }} ]]; then
+              exit 0
+            fi
+          done
+          exit 1
+
+      - run: echo "OK"
+
