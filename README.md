@@ -41,13 +41,13 @@ nosdump --kinds 1,7 wss://relay.damus.io > dump.jsonl
 Dump all your events:
 
 ```sh
-nosdump --authors <your pubkey (hex)> wss://relay.damus.io > dump.jsonl
+nosdump --authors <your pubkey> wss://relay.damus.io > dump.jsonl
 ```
 
 Dump all reply events to you:
 
 ```sh
-nosdump --kinds 1 --tag p:<your pubkey (hex)> wss://relay.damus.io > dump.jsonl
+nosdump --kinds 1 --tag p:<your pubkey> wss://relay.damus.io > dump.jsonl
 ```
 
 Dump all events published in the past 24 hours:
