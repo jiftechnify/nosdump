@@ -1,12 +1,10 @@
 name: Deno Update
 
 on:
-  push:
-    branches:
-      - main
   schedule:
     # every Saturday at 09:00 UTC (00:00 JST)
     - cron: "0 9 * * 6"
+  workflow_dispatch:
 
 jobs:
   update:
