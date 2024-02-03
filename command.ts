@@ -1,3 +1,4 @@
+import { toText } from "https://deno.land/std@0.214.0/streams/mod.ts";
 import {
   AllEventsIterOptions,
   ArgumentValue,
@@ -13,7 +14,6 @@ import {
   isDateValid,
   nip19,
   parseISO,
-  readAllSync,
   UpgradeCommand,
   ValidationError,
   z,
@@ -98,11 +98,10 @@ async function executeNosdump(
   cmdOptions: NosdumpCmdOptions,
   cmdArgs: [string, ...string[]],
 ) {
-  // if Deno.isatty(Deno.stdin.rid) returns false, stdin is connected to a pipe.
-  // cf. https://zenn.dev/kawarimidoll/articles/5559a185156bf4#deno.stdin%E3%81%AE%E5%87%A6%E7%90%86
-  const stdinText = !Deno.isatty(Deno.stdin.rid)
-    ? new TextDecoder("utf-8").decode(readAllSync(Deno.stdin))
-    : "";
+  // read from stdin if it's piped (not terminal)
+  const stdinText = Deno.stdin.isTerminal()
+    ? ""
+    : await toText(Deno.stdin.readable);
 
   const currUnixtimeSec = getUnixTime(new Date());
 
