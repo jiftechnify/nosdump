@@ -1,4 +1,4 @@
-name: Deno Update
+name: Deno Update 
 
 on:
   schedule:
@@ -12,8 +12,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Generate GitHub App token
+        uses: tibdex/github-app-token@v2
+        id: create_token
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
       - name: Setup repo
         uses: actions/checkout@v3
+        with:
+          token: ${{ steps.create_token.outputs.token }}
 
       - name: Setup Deno
         uses: denoland/setup-deno@v1
@@ -48,3 +57,4 @@ jobs:
           branch: udd-update
           author: GitHub <noreply@github.com>
           delete-branch: true
+          token: ${{ steps.create_token.outputs.token }}
