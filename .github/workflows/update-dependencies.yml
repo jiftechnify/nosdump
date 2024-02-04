@@ -13,19 +13,19 @@ jobs:
 
     steps:
       - name: Generate GitHub App token
-        uses: tibdex/github-app-token@v2
+        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
         id: create_token
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
 
       - name: Setup repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           token: ${{ steps.create_token.outputs.token }}
 
       - name: Setup Deno
-        uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@v1.1.4
         with:
           deno-version: v1.x
 
@@ -36,12 +36,12 @@ jobs:
         run: |
           {
             echo 'UDD_RESULT<<EOF'
-            deno run --allow-all https://deno.land/x/udd/main.ts $(find . -type f | grep -E ".*\.([mc]?(ts|js)|(ts|js)x?)$" -)
+            deno run --allow-all https://deno.land/x/udd@0.8.2/main.ts $(find . -type f | grep -E ".*\.([mc]?(ts|js)|(ts|js)x?)$" -)
             echo EOF
           } >> $GITHUB_OUTPUT
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "chore(deps): Update deno dependencies"
           title: Update Deno dependencies

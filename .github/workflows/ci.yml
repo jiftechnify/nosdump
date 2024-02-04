@@ -10,15 +10,15 @@ jobs:
       DENO_DIR: /home/runner/.cache/deno
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Deno
-        uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@v1.1.4
         with:
           deno-version: v1.x # Run with latest stable Deno.
 
       - name: Use dependency cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.DENO_DIR }}
           key: ${{ hashFiles('deno.lock') }}
