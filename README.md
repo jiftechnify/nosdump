@@ -61,7 +61,7 @@ nosdump --since 24h wss://relay.damus.io > dump.jsonl
 You can use following formats to refer **events**:
 
 - Hex event ID
-- NIP-19 identifer for event (`note1...` / `nevent1...`)
+- NIP-19 identifier for event (`note1...` / `nevent1...`)
 - `nostr:` URI for event (`nostr:note1...` / `nostr:nevent1...`)
 
 ```sh
