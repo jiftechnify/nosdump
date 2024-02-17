@@ -1,4 +1,4 @@
-import { toText } from "https://deno.land/std@0.215.0/streams/mod.ts";
+import { toText } from "https://deno.land/std@0.216.0/streams/mod.ts";
 import {
   AllEventsIterOptions,
   ArgumentValue,
