@@ -1,3 +1,5 @@
+export { toText as streamToText } from "https://deno.land/std@0.216.0/streams/mod.ts";
+
 export {
   Command,
   CompletionsCommand,
