@@ -1,3 +1,5 @@
+export { toText as streamToText } from "https://deno.land/std@0.216.0/streams/mod.ts";
+
 export {
   Command,
   CompletionsCommand,
@@ -18,11 +20,11 @@ export type {
   FetchTimeRangeFilter,
 } from "npm:nostr-fetch@0.15.0";
 
-export { nip19 } from "npm:nostr-tools@2.1.5";
+export { nip19 } from "npm:nostr-tools@2.2.1";
 
 export { z, ZodError } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
-export { fromZodError } from "npm:zod-validation-error@3.0.0";
+export { fromZodError } from "npm:zod-validation-error@3.0.2";
 
 export {
   getUnixTime,

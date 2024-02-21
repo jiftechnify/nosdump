@@ -1,4 +1,3 @@
-import { toText } from "https://deno.land/std@0.215.0/streams/mod.ts";
 import {
   AllEventsIterOptions,
   ArgumentValue,
@@ -14,6 +13,7 @@ import {
   isDateValid,
   nip19,
   parseISO,
+  streamToText,
   UpgradeCommand,
   ValidationError,
   z,
@@ -101,7 +101,7 @@ async function executeNosdump(
   // read from stdin if it's piped (not terminal)
   const stdinText = Deno.stdin.isTerminal()
     ? ""
-    : await toText(Deno.stdin.readable);
+    : await streamToText(Deno.stdin.readable);
 
   const currUnixtimeSec = getUnixTime(new Date());
 
