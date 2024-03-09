@@ -1,4 +1,4 @@
-export { toText as streamToText } from "https://deno.land/std@0.217.0/streams/mod.ts";
+export { toText as streamToText } from "https://deno.land/std@0.219.1/streams/mod.ts";
 
 export {
   Command,
@@ -24,7 +24,7 @@ export { nip19 } from "npm:nostr-tools@2.3.1";
 
 export { z, ZodError } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
-export { fromZodError } from "npm:zod-validation-error@3.0.2";
+export { fromZodError } from "npm:zod-validation-error@3.0.3";
 
 export {
   getUnixTime,
