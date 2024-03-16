@@ -1,4 +1,4 @@
-export { toText as streamToText } from "https://deno.land/std@0.219.1/streams/mod.ts";
+export { toText as streamToText } from "https://deno.land/std@0.220.1/streams/mod.ts";
 
 export {
   Command,
@@ -30,6 +30,6 @@ export {
   getUnixTime,
   isValid as isDateValid,
   parseISO,
-} from "npm:date-fns@3.3.1";
+} from "npm:date-fns@3.5.0";
 
 export { Duration } from "https://deno.land/x/durationjs@v4.1.1/mod.ts";
