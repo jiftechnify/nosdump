@@ -13,14 +13,14 @@ export {
   GithubProvider,
 } from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/upgrade/mod.ts";
 
-export { NostrFetcher } from "npm:nostr-fetch@0.15.0";
+export { NostrFetcher } from "npm:nostr-fetch@0.15.1";
 export type {
   AllEventsIterOptions,
   FetchFilter,
   FetchTimeRangeFilter,
-} from "npm:nostr-fetch@0.15.0";
+} from "npm:nostr-fetch@0.15.1";
 
-export { nip19 } from "npm:nostr-tools@2.3.1";
+export { nip19 } from "npm:nostr-tools@2.3.2";
 
 export { z, ZodError } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
@@ -30,6 +30,6 @@ export {
   getUnixTime,
   isValid as isDateValid,
   parseISO,
-} from "npm:date-fns@3.5.0";
+} from "npm:date-fns@3.6.0";
 
 export { Duration } from "https://deno.land/x/durationjs@v4.1.1/mod.ts";
