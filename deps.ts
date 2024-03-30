@@ -1,4 +1,4 @@
-export { toText as streamToText } from "https://deno.land/std@0.220.1/streams/mod.ts";
+export { toText as streamToText } from "https://deno.land/std@0.221.0/streams/mod.ts";
 
 export {
   Command,
