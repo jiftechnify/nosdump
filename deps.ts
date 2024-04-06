@@ -20,11 +20,11 @@ export type {
   FetchTimeRangeFilter,
 } from "npm:nostr-fetch@0.15.1";
 
-export { nip19 } from "npm:nostr-tools@2.3.2";
+export { nip19 } from "npm:nostr-tools@2.4.0";
 
 export { z, ZodError } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
-export { fromZodError } from "npm:zod-validation-error@3.0.3";
+export { fromZodError } from "npm:zod-validation-error@3.1.0";
 
 export {
   getUnixTime,
