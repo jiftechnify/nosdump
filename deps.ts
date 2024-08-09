@@ -24,7 +24,7 @@ export { nip19 } from "npm:nostr-tools@2.7.1";
 
 export { z, ZodError } from "https://deno.land/x/zod@v3.23.8/mod.ts";
 
-export { fromZodError } from "npm:zod-validation-error@3.3.1";
+export { fromError } from "npm:zod-validation-error@3.3.1";
 
 export {
   getUnixTime,

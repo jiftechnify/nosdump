@@ -7,7 +7,7 @@ import {
   Duration,
   FetchFilter,
   FetchTimeRangeFilter,
-  fromZodError,
+  fromError,
   getUnixTime,
   GithubProvider,
   isDateValid,
@@ -226,7 +226,7 @@ const parseFilterFromText = (
     return Result.ok([fetchFilter, fetchTimeRange]);
   } catch (err) {
     if (err instanceof ZodError) {
-      return Result.err(fromZodError(err));
+      return Result.err(fromError(err));
     }
     if (err instanceof Error) {
       return Result.err(err);
