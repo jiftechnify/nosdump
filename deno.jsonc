@@ -3,7 +3,7 @@
   "version": "0.4.5",
   "exports": "./mod.ts",
   "tasks": {
-    "static-checks": "deno check main.ts & deno fmt --check & deno lint",
+    "static-checks": "deno check mod.ts & deno fmt --check & deno lint",
     "tidy": "rm -f deno.lock && deno cache mod.ts"
   },
   "imports": {
