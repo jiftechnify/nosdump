@@ -82,6 +82,14 @@ export const nosdumpCommand = new Command()
     "-u, --until <time-spec:string>",
     "Fetch only events older than the timestamp if specified.",
   )
+  .option(
+    "-e, --e <event-ids:string[]>",
+    "Shorthand for --tag e:<event-ids>",
+  )
+  .option(
+    "-p, --p <pubkeys:string[]>",
+    "Shorthand for --tag p:<pubkeys>",
+  )
   .group("Fetch options")
   .option("--skip-verification", "Skip event signature verification.", {
     default: false,
@@ -244,15 +252,10 @@ const parseFilterFromText = (
   }
 };
 
-type FilterCmdOpts = {
-  ids?: string[] | undefined;
-  authors?: string[] | undefined;
-  kinds?: number[] | undefined;
-  tag?: TagSpec[] | undefined;
-  search?: string | undefined;
-  since?: string | undefined;
-  until?: string | undefined;
-};
+type FilterCmdOpts = Omit<
+  NosdumpCmdOptions,
+  "dryRun" | "skipVerification" | "stdinReq"
+>;
 
 /**
  * Parse command line options as Nostr filter.
@@ -284,8 +287,15 @@ const parseFilterFromOptions = (
       errs.push(...res.err);
     }
   }
-  if (filterOpts.tag !== undefined) {
-    const res = mergeTagSpecs(filterOpts.tag);
+  const tagSpecs = filterOpts.tag ?? [];
+  if (filterOpts.e !== undefined) {
+    tagSpecs.push({ name: "e", values: filterOpts.e });
+  }
+  if (filterOpts.p !== undefined) {
+    tagSpecs.push({ name: "p", values: filterOpts.p });
+  }
+  if (tagSpecs.length > 0) {
+    const res = mergeTagSpecs(tagSpecs);
     if (res.isOk) {
       Object.assign(fetchFilter, res.val);
     } else {

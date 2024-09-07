@@ -68,6 +68,8 @@ Deno.test("parseInput", async (t) => {
             ],
           },
         ],
+        e: ["bc118fccbaa378c89ef59f7b4478f885d75233142f62e116ba074f6010c90171"],
+        p: ["a33512ba0e57f11da0b909404e2b651f5831ad20b121dbc3a29eb66aaefe283a"],
         search: "pura vida",
         since: "100",
         until: "200",
@@ -85,11 +87,14 @@ Deno.test("parseInput", async (t) => {
       ],
       kinds: [1],
       search: "pura vida",
+      // e-tag/p-tag filters from --tag option and -e/-p options should be merged
       "#e": [
         "c824e1184d4f3660097d8299632ac723f5bfaea1eb569867f4924f2f0713a321",
+        "bc118fccbaa378c89ef59f7b4478f885d75233142f62e116ba074f6010c90171",
       ],
       "#p": [
         "d1d1747115d16751a97c239f46ec1703292c3b7e9988b9ebdd4ec4705b15ed44",
+        "a33512ba0e57f11da0b909404e2b651f5831ad20b121dbc3a29eb66aaefe283a",
       ],
       "#t": ["nostr", "zap"],
       "#a": [
