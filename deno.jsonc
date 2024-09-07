@@ -11,10 +11,10 @@
     "@retraigo/duration": "jsr:@retraigo/duration@^4.1.1",
     "@std/assert": "jsr:@std/assert@1.0.4",
     "@std/streams": "jsr:@std/streams@1.0.4",
-    "zod/": "https://deno.land/x/zod@v3.23.8/",
     "date-fns": "npm:date-fns@3.6.0",
-    "zod-validation-error": "npm:zod-validation-error@3.3.1",
     "nostr-fetch": "npm:nostr-fetch@0.15.1",
-    "nostr-tools": "npm:nostr-tools@2.7.2"
+    "nostr-tools": "npm:nostr-tools@2.7.2",
+    "zod": "npm:zod@3.23.8",
+    "zod-validation-error": "npm:zod-validation-error@3.3.1"
   }
 }

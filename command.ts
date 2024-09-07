@@ -18,7 +18,7 @@ import { nip19 } from "nostr-tools";
 import { getUnixTime, isValid as isDateValid, parseISO } from "date-fns";
 import { Duration } from "@retraigo/duration";
 
-import { z, ZodError } from "zod/mod.ts";
+import { z, ZodError } from "zod";
 import { fromError } from "zod-validation-error";
 
 import { dumpNostrEvents } from "./dump.ts";
