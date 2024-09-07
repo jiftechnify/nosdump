@@ -1,35 +1,28 @@
-export { toText as streamToText } from "https://deno.land/std@0.224.0/streams/mod.ts";
+export { toText as streamToText } from "@std/streams";
 
 export {
   Command,
   CompletionsCommand,
   UpgradeCommand,
   ValidationError,
-} from "https://deno.land/x/cliffy@v1.0.0-rc.4/command/mod.ts";
-export type { ArgumentValue } from "https://deno.land/x/cliffy@v1.0.0-rc.4/command/mod.ts";
+} from "@cliffy/command";
+export type { ArgumentValue } from "@cliffy/command";
 
-export {
-  DenoLandProvider,
-  GithubProvider,
-} from "https://deno.land/x/cliffy@v1.0.0-rc.4/command/upgrade/mod.ts";
+export { DenoLandProvider, GithubProvider } from "@cliffy/command/upgrade";
 
-export { NostrFetcher } from "npm:nostr-fetch@0.15.1";
+export { NostrFetcher } from "nostr-fetch";
 export type {
   AllEventsIterOptions,
   FetchFilter,
   FetchTimeRangeFilter,
-} from "npm:nostr-fetch@0.15.1";
+} from "nostr-fetch";
 
-export { nip19 } from "npm:nostr-tools@2.7.2";
+export { nip19 } from "nostr-tools";
 
-export { z, ZodError } from "https://deno.land/x/zod@v3.23.8/mod.ts";
+export { z, ZodError } from "zod/mod.ts";
 
-export { fromError } from "npm:zod-validation-error@3.3.1";
+export { fromError } from "zod-validation-error";
 
-export {
-  getUnixTime,
-  isValid as isDateValid,
-  parseISO,
-} from "npm:date-fns@3.6.0";
+export { getUnixTime, isValid as isDateValid, parseISO } from "date-fns";
 
-export { Duration } from "https://deno.land/x/durationjs@v4.1.1/mod.ts";
+export { Duration } from "@retraigo/duration";

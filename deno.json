@@ -1,5 +1,0 @@
-{
-  "tasks": {
-    "static-checks": "deno check main.ts & deno fmt --check & deno lint"
-  }
-}
