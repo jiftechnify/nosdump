@@ -147,7 +147,7 @@ nostreq --kinds 1,7 | nosdump -R wss://relay.damus.io > dump.jsonl
 
 ```
 Usage:   nosdump [options...] <relay-URLs...>
-Version: 0.4.6                               
+Version: 0.5.0                               
 
 Description:
 
