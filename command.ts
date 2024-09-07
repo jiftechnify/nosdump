@@ -1,22 +1,25 @@
 import { toText as streamToText } from "@std/streams";
-import {
-  Command,
-  CompletionsCommand,
-  UpgradeCommand,
-  ValidationError,
-} from "@cliffy/command";
+
+import { Command, ValidationError } from "@cliffy/command";
 import type { ArgumentValue } from "@cliffy/command";
-import { DenoLandProvider, GithubProvider } from "@cliffy/command/upgrade";
+import { CompletionsCommand } from "@cliffy/command/completions";
+import { UpgradeCommand } from "@cliffy/command/upgrade";
+import { DenoLandProvider } from "@cliffy/command/upgrade/provider/deno-land";
+import { JsrProvider } from "@cliffy/command/upgrade/provider/jsr";
+import { GithubProvider } from "@cliffy/command/upgrade/provider/github";
+
 import type {
   AllEventsIterOptions,
   FetchFilter,
   FetchTimeRangeFilter,
 } from "nostr-fetch";
 import { nip19 } from "nostr-tools";
-import { z, ZodError } from "zod/mod.ts";
-import { fromError } from "zod-validation-error";
+
 import { getUnixTime, isValid as isDateValid, parseISO } from "date-fns";
 import { Duration } from "@retraigo/duration";
+
+import { z, ZodError } from "zod/mod.ts";
+import { fromError } from "zod-validation-error";
 
 import { dumpNostrEvents } from "./dump.ts";
 import { Result } from "./types.ts";
@@ -33,6 +36,10 @@ export const nosdumpCommand = new Command()
     new UpgradeCommand({
       provider: [
         new DenoLandProvider({ name: "nosdump" }),
+        new JsrProvider({
+          scope: "jifechnify",
+          package: "@jiftechnify/nosdump",
+        }),
         new GithubProvider({ repository: "jiftechnify/nosdump" }),
       ],
     }),
