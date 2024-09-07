@@ -36,25 +36,25 @@ nosdump wss://relay.damus.io > dump.jsonl
 Dump all text events (kind:1) and reaction events (kind:7):
 
 ```sh
-nosdump --kinds 1,7 wss://relay.damus.io > dump.jsonl
+nosdump -k 1,7 wss://relay.damus.io > dump.jsonl
 ```
 
 Dump all your events:
 
 ```sh
-nosdump --authors <your pubkey> wss://relay.damus.io > dump.jsonl
+nosdump -a <your pubkey> wss://relay.damus.io > dump.jsonl
 ```
 
 Dump all reply events to you:
 
 ```sh
-nosdump --kinds 1 --tag p:<your pubkey> wss://relay.damus.io > dump.jsonl
+nosdump -k 1 -p <your pubkey> wss://relay.damus.io > dump.jsonl
 ```
 
 Dump all events published in the past 24 hours:
 
 ```sh
-nosdump --since 24h wss://relay.damus.io > dump.jsonl
+nosdump -s 24h wss://relay.damus.io > dump.jsonl
 ```
 
 ### Various input formats
@@ -67,14 +67,14 @@ You can use following formats to refer **events**:
 
 ```sh
 # They are all valid!
-nosdump --ids c824e1184d4f3660097d8299632ac723f5bfaea1eb569867f4924f2f0713a321 wss://relay.damus.io
-nosdump --ids note1eqjwzxzdfumxqztas2vkx2k8y06mlt4padtfsel5jf8j7pcn5vsssd2g8m wss://relay.damus.io
-nosdump --ids nevent1qqsvsf8prpx57dnqp97c9xtr9trj8adl46s7k45cvl6fyne0quf6xggq2q33g wss://relay.damus.io
-nosdump --ids nostr:note1eqjwzxzdfumxqztas2vkx2k8y06mlt4padtfsel5jf8j7pcn5vsssd2g8m wss://relay.damus.io
-nosdump --ids nostr:nevent1qqsvsf8prpx57dnqp97c9xtr9trj8adl46s7k45cvl6fyne0quf6xggq2q33g wss://relay.damus.io
+nosdump -i c824e1184d4f3660097d8299632ac723f5bfaea1eb569867f4924f2f0713a321 wss://relay.damus.io
+nosdump -i note1eqjwzxzdfumxqztas2vkx2k8y06mlt4padtfsel5jf8j7pcn5vsssd2g8m wss://relay.damus.io
+nosdump -i nevent1qqsvsf8prpx57dnqp97c9xtr9trj8adl46s7k45cvl6fyne0quf6xggq2q33g wss://relay.damus.io
+nosdump -i nostr:note1eqjwzxzdfumxqztas2vkx2k8y06mlt4padtfsel5jf8j7pcn5vsssd2g8m wss://relay.damus.io
+nosdump -i nostr:nevent1qqsvsf8prpx57dnqp97c9xtr9trj8adl46s7k45cvl6fyne0quf6xggq2q33g wss://relay.damus.io
 
 # Even in e-tag qeury!
-nosdump --tag e:nostr:note1eqjwzxzdfumxqztas2vkx2k8y06mlt4padtfsel5jf8j7pcn5vsssd2g8m wss://relay.damus.io
+nosdump -e nostr:note1eqjwzxzdfumxqztas2vkx2k8y06mlt4padtfsel5jf8j7pcn5vsssd2g8m wss://relay.damus.io
 ```
 
 You can use following formats to refer **pubkeys**:
@@ -85,14 +85,14 @@ You can use following formats to refer **pubkeys**:
 
 ```sh
 # They are all valid!
-nosdump --author d1d1747115d16751a97c239f46ec1703292c3b7e9988b9ebdd4ec4705b15ed44 wss://relay.damus.io
-nosdump --author npub168ghgug469n4r2tuyw05dmqhqv5jcwm7nxytn67afmz8qkc4a4zqsu2dlc wss://relay.damus.io
-nosdump --author nprofile1qqsdr5t5wy2aze63497z886xastsx2fv8dlfnz9ea0w5a3rstv2763qgyw5f5 wss://relay.damus.io
-nosdump --author nostr:npub168ghgug469n4r2tuyw05dmqhqv5jcwm7nxytn67afmz8qkc4a4zqsu2dlc wss://relay.damus.io
-nosdump --author nostr:nprofile1qqsdr5t5wy2aze63497z886xastsx2fv8dlfnz9ea0w5a3rstv2763qgyw5f5 wss://relay.damus.io
+nosdump -a d1d1747115d16751a97c239f46ec1703292c3b7e9988b9ebdd4ec4705b15ed44 wss://relay.damus.io
+nosdump -a npub168ghgug469n4r2tuyw05dmqhqv5jcwm7nxytn67afmz8qkc4a4zqsu2dlc wss://relay.damus.io
+nosdump -a nprofile1qqsdr5t5wy2aze63497z886xastsx2fv8dlfnz9ea0w5a3rstv2763qgyw5f5 wss://relay.damus.io
+nosdump -a nostr:npub168ghgug469n4r2tuyw05dmqhqv5jcwm7nxytn67afmz8qkc4a4zqsu2dlc wss://relay.damus.io
+nosdump -a nostr:nprofile1qqsdr5t5wy2aze63497z886xastsx2fv8dlfnz9ea0w5a3rstv2763qgyw5f5 wss://relay.damus.io
 
 # Even in p-tag query!
-nosdump --tag p:nostr:npub168ghgug469n4r2tuyw05dmqhqv5jcwm7nxytn67afmz8qkc4a4zqsu2dlc wss://relay.damus.io
+nosdump -p nostr:npub168ghgug469n4r2tuyw05dmqhqv5jcwm7nxytn67afmz8qkc4a4zqsu2dlc wss://relay.damus.io
 ```
 
 You can use following formats to specify **timestamps**:
@@ -107,16 +107,16 @@ You can use following formats to specify **timestamps**:
 
 ```sh
 # Unixtime in seconds
-nosdump --since 1689768000 --until 1689778800 wss://relay.damus.io
+nosdump -s 1689768000 -u 1689778800 wss://relay.damus.io
 
 # Datetime string (UTC)
-nosdump --since 2023-07-19T12:00:00Z --until 2023-07-19T15:00:00Z wss://relay.damus.io
+nosdump -s 2023-07-19T12:00:00Z -u 2023-07-19T15:00:00Z wss://relay.damus.io
 
 # Datetime string (local time)
-nosdump --since 2023-07-19T12:00:00 --until 2023-07-19T15:00:00 wss://relay.damus.io
+nosdump -s 2023-07-19T12:00:00 -u 2023-07-19T15:00:00 wss://relay.damus.io
 
 # Relative time: since an hour ago, until 30 minutes ago
-nosdump --since 1h --until 30m wss://relay.damus.io
+nosdump -s 1h -u 30m wss://relay.damus.io
 ```
 
 ### Read a filter from stdin
@@ -147,7 +147,7 @@ nostreq --kinds 1,7 | nosdump -R wss://relay.damus.io > dump.jsonl
 
 ```
 Usage:   nosdump [options...] <relay-URLs...>
-Version: 0.4.6
+Version: 0.4.6                               
 
 Description:
 
@@ -155,21 +155,23 @@ Description:
 
 Options:
 
-  -h, --help     - Show this help.
-  -V, --version  - Show the version number for this program.
+  -h, --help     - Show this help.                                                               
+  -V, --version  - Show the version number for this program.                                     
   -n, --dry-run  - Just print parsed options instead of running actual dumping.  (Default: false)
 
 Filter options:
 
-  --ids      <ids>        - Comma separated list of target event ids.
-  --authors  <authors>    - Comma separated list of target author's pubkeys.
-  --kinds    <kinds>      - Comma separated list of target event kinds.
-  --tag      <tag-spec>   - Tag query specifier. Syntax: <tag name>:<comma separated tag values>.
-                            You can specify multiple --tag options.
-  --search   <query>      - Search query. 
-                            Note that if you use this filter against relays which don't support NIP-50, no event will be fetched.
-  --since    <time-spec>  - Fetch only events newer than the timestamp if specified.
-  --until    <time-spec>  - Fetch only events older than the timestamp if specified.
+  -i, --ids      <ids>        - Comma separated list of target event ids.                                      
+  -a, --authors  <authors>    - Comma separated list of target author's pubkeys.                               
+  -k, --kinds    <kinds>      - Comma separated list of target event kinds.                                    
+  -t, --tag      <tag-spec>   - Tag query specifier. Syntax: <tag name>:<comma separated tag values>. You can  
+                                specify multiple --tag options.                                                
+  -S, --search   <query>      - Search query. Note that if you use this filter against relays which don't      
+                                support NIP-50, no event will be fetched.                                      
+  -s, --since    <time-spec>  - Fetch only events newer than the timestamp if specified.                       
+  -u, --until    <time-spec>  - Fetch only events older than the timestamp if specified.                       
+  -e, --e        <event-ids>  - Shorthand for --tag e:<event-ids>                                              
+  -p, --p        <pubkeys>    - Shorthand for --tag p:<pubkeys>                                                
 
 Fetch options:
 
@@ -181,6 +183,6 @@ Input options:
 
 Commands:
 
-  completions  - Generate shell completions.
+  completions  - Generate shell completions.                           
   upgrade      - Upgrade nosdump executable to latest or given version.
 ```
