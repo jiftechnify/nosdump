@@ -102,7 +102,7 @@ You can use following formats to specify **timestamps**:
   - If you don't specify a timezone explicitly, it will be interpreted as
     **local time**.
 - Relative time represented by a duration string (e.g. `6h`, means 6 hours ago)
-  - It uses [duration.js](https://deno.land/x/durationjs@v4.1.0) to parse
+  - It uses [duration.js](https://jsr.io/@retraigo/duration) to parse
     duration strings.
 
 ```sh
