@@ -1,8 +1,8 @@
-import {
+import type {
   AllEventsIterOptions,
   FetchFilter,
   FetchTimeRangeFilter,
-} from "./deps.ts";
+} from "nostr-fetch";
 
 export type NosdumpParams = {
   relayUrls: string[];

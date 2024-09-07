@@ -1,16 +1,13 @@
 import {
-  kindType,
-  NosdumpCmdOptions,
-  parseInput,
-  tagSpecType,
-} from "./command.ts";
-import { parseISO } from "./deps.ts";
-import {
   assert,
   assertArrayIncludes,
   assertEquals,
   assertThrows,
-} from "./dev_deps.ts";
+} from "@std/assert";
+import { parseISO } from "date-fns";
+
+import { kindType, parseInput, tagSpecType } from "./command.ts";
+import type { NosdumpCmdOptions } from "./command.ts";
 
 const defaultCmdOpts: NosdumpCmdOptions = {
   dryRun: false,
