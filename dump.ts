@@ -1,5 +1,6 @@
-import { NostrFetcher } from "./deps.ts";
-import { NosdumpParams } from "./types.ts";
+import { NostrFetcher } from "nostr-fetch";
+
+import type { NosdumpParams } from "./types.ts";
 
 export const dumpNostrEvents = async ({
   relayUrls,
