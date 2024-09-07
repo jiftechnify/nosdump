@@ -4,7 +4,7 @@
   "exports": "./mod.ts",
   "tasks": {
     "static-checks": "deno check mod.ts & deno fmt --check & deno lint",
-    "tidy": "rm -f deno.lock && deno cache mod.ts"
+    "tidy": "rm -f deno.lock && deno cache \"*.ts\""
   },
   "imports": {
     "@cliffy/command": "jsr:@cliffy/command@1.0.0-rc.5",
