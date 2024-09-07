@@ -41,13 +41,13 @@ jobs:
         run: |
           NON_WIN_ARCHES=(x86_64-unknown-linux-gnu x86_64-apple-darwin aarch64-apple-darwin)
           for ARCH in "${NON_WIN_ARCHES[@]}"; do
-            deno compile --target $ARCH -o nosdump --allow-net main.ts
+            deno compile --target $ARCH -o nosdump --allow-net mod.ts
             zip -r "nosdump-${ARCH}" nosdump
           done
 
           WIN_ARCHES=(x86_64-pc-windows-msvc)
           for ARCH in "${WIN_ARCHES[@]}"; do
-            deno compile --target $ARCH -o nosdump.exe --allow-net main.ts
+            deno compile --target $ARCH -o nosdump.exe --allow-net mod.ts
             zip -r "nosdump-${ARCH}" nosdump.exe
           done
       
