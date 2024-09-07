@@ -53,30 +53,33 @@ export const nosdumpCommand = new Command()
     { default: false },
   )
   .group("Filter options")
-  .option("--ids <ids:string[]>", "Comma separated list of target event ids.")
   .option(
-    "--authors <authors:string[]>",
+    "-i, --ids <ids:string[]>",
+    "Comma separated list of target event ids.",
+  )
+  .option(
+    "-a, --authors <authors:string[]>",
     "Comma separated list of target author's pubkeys.",
   )
   .option(
-    "--kinds <kinds:kind[]>",
+    "-k, --kinds <kinds:kind[]>",
     "Comma separated list of target event kinds.",
   )
   .option(
-    "--tag <tag-spec:tag-spec>",
+    "-t, --tag <tag-spec:tag-spec>",
     "Tag query specifier. Syntax: <tag name>:<comma separated tag values>. You can specify multiple --tag options.",
     { collect: true },
   )
   .option(
-    "--search <query:string>",
+    "-S --search <query:string>",
     "Search query. Note that if you use this filter against relays which don't support NIP-50, no event will be fetched.",
   )
   .option(
-    "--since <time-spec:string>",
+    "-s, --since <time-spec:string>",
     "Fetch only events newer than the timestamp if specified.",
   )
   .option(
-    "--until <time-spec:string>",
+    "-u, --until <time-spec:string>",
     "Fetch only events older than the timestamp if specified.",
   )
   .group("Fetch options")
