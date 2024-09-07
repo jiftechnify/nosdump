@@ -8,6 +8,9 @@ on:
 jobs:
   release:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      id-token: write
     env:
       DENO_DIR: /home/runner/.cache/deno
     steps:
@@ -17,7 +20,7 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@1.4.0
         with:
-          deno-version: "~1.45"
+          deno-version: "~1.46"
 
       - name: Use dependency cache
         uses: actions/cache@v4
@@ -30,6 +33,9 @@ jobs:
 
       - name: Run tests
         run: deno test
+
+      - name: Publish to JSR
+        run: deno publish
 
       - name: Build executables
         run: |
