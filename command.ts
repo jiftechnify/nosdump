@@ -37,7 +37,7 @@ export const nosdumpCommand = new Command()
       provider: [
         new DenoLandProvider({ name: "nosdump" }),
         new JsrProvider({
-          scope: "jifechnify",
+          scope: "jiftechnify",
           package: "@jiftechnify/nosdump",
         }),
         new GithubProvider({ repository: "jiftechnify/nosdump" }),
