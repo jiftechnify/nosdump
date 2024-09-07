@@ -7,7 +7,7 @@ export const dumpNostrEvents = async ({
   fetchFilter,
   fetchTimeRange,
   fetchOptions,
-}: NosdumpParams) => {
+}: NosdumpParams): Promise<void> => {
   const fetcher = NostrFetcher.init({ minLogLevel: "warn" });
   for await (
     const ev of fetcher.allEventsIterator(
