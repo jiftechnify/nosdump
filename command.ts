@@ -27,7 +27,7 @@ import type { MiscOptions, NosdumpParams } from "./types.ts";
 
 export const nosdumpCommand = new Command()
   .name("nosdump")
-  .version("0.4.5")
+  .version("0.4.6")
   .description("A tool to dump events stored in Nostr relays")
   .usage("[options...] <relay-URLs...>")
   .command("completions", new CompletionsCommand())
