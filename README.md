@@ -1,5 +1,6 @@
 # nosdump
 
+[![JSR](https://jsr.io/badges/@jiftechnify/nosdump)](https://jsr.io/@jiftechnify/nosdump)
 [![deno.land](https://shield.deno.dev/x/nosdump)](https://deno.land/x/nosdump)
 
 A command line tool which dumps events stored in
@@ -14,7 +15,7 @@ A command line tool which dumps events stored in
 [Install Deno](https://deno.land/manual/getting_started/installation) and run:
 
 ```sh
-deno install --allow-net https://deno.land/x/nosdump@0.4.6/main.ts
+deno install --allow-net "jsr:@jiftechnify/nosdump"
 ```
 
 ### With pre-built binaries (easy)
