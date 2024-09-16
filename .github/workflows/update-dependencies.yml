@@ -25,7 +25,7 @@ jobs:
           token: ${{ steps.create_token.outputs.token }}
 
       - name: Setup Deno
-        uses: denoland/setup-deno@1.4.0
+        uses: denoland/setup-deno@v1.5.1
         with:
           deno-version: "~1.46"
 
