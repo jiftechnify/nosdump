@@ -13,7 +13,7 @@ import type {
   FetchFilter,
   FetchTimeRangeFilter,
 } from "nostr-fetch";
-import { nip19 } from "nostr-tools";
+import * as nip19 from "nostr-tools/nip19";
 
 import { getUnixTime, isValid as isDateValid, parseISO } from "date-fns";
 import { Duration } from "@retraigo/duration";
@@ -24,6 +24,7 @@ import { fromError } from "zod-validation-error";
 import { dumpNostrEvents } from "./dump.ts";
 import { Result } from "./types.ts";
 import type { MiscOptions, NosdumpParams } from "./types.ts";
+import { aliasCommand } from "./subcommand/alias.ts";
 
 export const nosdumpCommand = new Command()
   .name("nosdump")
@@ -44,6 +45,7 @@ export const nosdumpCommand = new Command()
       ],
     }),
   )
+  .command("alias", aliasCommand)
   .reset()
   .type("kind", kindType)
   .type("tag-spec", tagSpecType)
