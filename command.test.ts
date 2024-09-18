@@ -8,6 +8,7 @@ import { parseISO } from "date-fns";
 
 import { kindType, parseInput, tagSpecType } from "./command.ts";
 import type { NosdumpCmdOptions } from "./command.ts";
+import { NosdumpConfigRepo } from "./config.ts";
 
 const defaultCmdOpts: NosdumpCmdOptions = {
   dryRun: false,
@@ -15,21 +16,33 @@ const defaultCmdOpts: NosdumpCmdOptions = {
   stdinReq: false,
 };
 
-const dummyRelayUrls: [string] = ["wss://example.com"];
+const dummyRelayUrls: [string] = ["wss://example.com/"];
+const emptyConfig = NosdumpConfigRepo.fromConfigObjectForTesting({
+  relay: { aliases: {} },
+});
 
-Deno.test("parseInput", async (t) => {
-  await t.step("arguments as relay URLs", () => {
+Deno.test("parseInput()", async (t) => {
+  await t.step("resolves rest arguments as relay specifiers", () => {
+    const config = NosdumpConfigRepo.fromConfigObjectForTesting({
+      relay: {
+        aliases: {
+          "bar": "wss://bar.example.com/",
+        },
+      },
+    });
+
     const res = parseInput(
       defaultCmdOpts,
-      ["wss://foo.example.com", "wss://bar.example.com"],
+      ["wss://foo.example.com/", "bar"],
       "",
       0,
+      config,
     );
 
     assert(res.isOk);
-    assertEquals(res.val.relayUrls, [
-      "wss://foo.example.com",
-      "wss://bar.example.com",
+    assertArrayIncludes(res.val.relayUrls, [
+      "wss://foo.example.com/",
+      "wss://bar.example.com/",
     ]);
   });
 
@@ -77,6 +90,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -134,6 +148,7 @@ Deno.test("parseInput", async (t) => {
         until: 200,
       }),
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -179,6 +194,7 @@ Deno.test("parseInput", async (t) => {
         },
       ]),
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -208,6 +224,7 @@ Deno.test("parseInput", async (t) => {
         until: 200,
       }),
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -240,6 +257,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -279,6 +297,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -302,6 +321,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -334,6 +354,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -357,6 +378,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -381,6 +403,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -400,6 +423,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -421,6 +445,7 @@ Deno.test("parseInput", async (t) => {
         dummyRelayUrls,
         "",
         0,
+        emptyConfig,
       );
       const sinceOffsetSec =
         parseISO("2022-01-01T00:00:00").getTimezoneOffset() * 60;
@@ -446,6 +471,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       now,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -468,6 +494,7 @@ Deno.test("parseInput", async (t) => {
         dummyRelayUrls,
         "",
         0,
+        emptyConfig,
       );
       assert(!res.isOk);
     }
@@ -486,6 +513,7 @@ Deno.test("parseInput", async (t) => {
         dummyRelayUrls,
         "",
         0,
+        emptyConfig,
       );
       assert(!res.isOk);
     }
@@ -504,6 +532,7 @@ Deno.test("parseInput", async (t) => {
         dummyRelayUrls,
         "",
         0,
+        emptyConfig,
       );
       assert(!res.isOk);
     }
@@ -521,6 +550,7 @@ Deno.test("parseInput", async (t) => {
         dummyRelayUrls,
         JSON.stringify(i),
         0,
+        emptyConfig,
       );
       assert(!res.isOk);
     }
@@ -540,6 +570,7 @@ Deno.test("parseInput", async (t) => {
           dummyRelayUrls,
           JSON.stringify(i),
           0,
+          emptyConfig,
         );
         assert(!res.isOk);
       }

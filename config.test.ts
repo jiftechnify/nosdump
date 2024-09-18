@@ -1,7 +1,61 @@
-import { assert, assertEquals, assertThrows } from "@std/assert";
+import {
+  assert,
+  assertArrayIncludes,
+  assertEquals,
+  assertThrows,
+} from "@std/assert";
 
-import { NosdumpConfigSchema, RelayAliasesOps } from "./config.ts";
+import {
+  NosdumpConfigRepo,
+  NosdumpConfigSchema,
+  RelayAliasesOps,
+} from "./config.ts";
 import { ZodError } from "zod";
+
+Deno.test("NosdumpConfigRepo", async (t) => {
+  await t.step("resolveRelaySpecifiers()", async (t) => {
+    await t.step("basic scenario", () => {
+      const repo = NosdumpConfigRepo.fromConfigObjectForTesting({
+        relay: {
+          aliases: {
+            "foo": "wss://foo.example.com/",
+            "bar": "wss://bar.example.com/",
+          },
+        },
+      });
+      const resolved = repo.resolveRelaySpecifiers([
+        "foo",
+        "wss://hoge.example.com/",
+        "bar",
+      ]);
+      assert(resolved.isOk);
+      assertArrayIncludes(resolved.val, [
+        "wss://foo.example.com/",
+        "wss://hoge.example.com/",
+        "wss://bar.example.com/",
+      ]);
+    });
+
+    await t.step("returns error if an alias is not found", () => {
+      const repo = NosdumpConfigRepo.fromConfigObjectForTesting({
+        relay: {
+          aliases: {
+            "foo": "wss://foo.example.com/",
+          },
+        },
+      });
+
+      const resolved = repo.resolveRelaySpecifiers([
+        "foo",
+        "wss://hoge.example.com/",
+        "bar",
+      ]);
+      assert(!resolved.isOk);
+      assert(resolved.err.length === 1);
+      assert(resolved.err.some((msg) => msg.includes("bar")));
+    });
+  });
+});
 
 Deno.test("RelayAliasesOps", async (t) => {
   await t.step("basic scenario", async (t) => {

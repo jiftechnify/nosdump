@@ -4,6 +4,7 @@ import * as toml from "@std/toml";
 import { z, type ZodError } from "zod";
 import { normalizeURL as normalizeRelayUrl } from "nostr-tools/utils";
 import { ValidationError } from "@cliffy/command";
+import { Result } from "./types.ts";
 
 const DEFAULT_CONFIG_DIR = resolve(xdg.config(), "nosdump");
 const DEFAULT_CONFIG_PATH = resolve(DEFAULT_CONFIG_DIR, "config.toml");
@@ -27,6 +28,9 @@ function assertRelayUrlIsValid(url: string) {
       `relay URL must start with wss:// or ws:// (input: ${url}).`,
     );
   }
+}
+function relayUrlIsValid(url: string): boolean {
+  return URL.canParse(url) && reRelayUrl.test(url);
 }
 
 export const NosdumpConfigSchema = z.object({
@@ -82,6 +86,10 @@ export class NosdumpConfigRepo {
     }
   }
 
+  static fromConfigObjectForTesting(conf: NosdumpConfig) {
+    return new NosdumpConfigRepo(conf);
+  }
+
   async save(): Promise<void> {
     const t = toml.stringify(this.conf);
     await Deno.mkdir(DEFAULT_CONFIG_DIR, { recursive: true });
@@ -90,6 +98,34 @@ export class NosdumpConfigRepo {
 
   get relayAliases(): RelayAliasesOps {
     return this.relayAliasesOps;
+  }
+
+  resolveRelaySpecifiers(relaySpecs: string[]): Result<string[], string[]> {
+    const resolved = new Set<string>();
+    const errors: string[] = [];
+
+    for (const rspec of relaySpecs) {
+      // resolve valid relay URL as is
+      if (relayUrlIsValid(rspec)) {
+        resolved.add(rspec);
+        continue;
+      }
+
+      // resolve relay alias as referent
+      const aliased = this.relayAliases.get(rspec);
+      if (aliased !== undefined) {
+        resolved.add(aliased);
+        continue;
+      }
+
+      // all attempts failed
+      errors.push(`"${rspec}" is not a valid relay URL or a relay alias.`);
+    }
+
+    if (errors.length > 0) {
+      return Result.err(errors);
+    }
+    return Result.ok([...resolved]);
   }
 }
 

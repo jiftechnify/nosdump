@@ -25,6 +25,7 @@ import { dumpNostrEvents } from "./dump.ts";
 import { Result } from "./types.ts";
 import type { MiscOptions, NosdumpParams } from "./types.ts";
 import { aliasCommand } from "./subcommand/alias.ts";
+import { NosdumpConfigRepo } from "./config.ts";
 
 export const nosdumpCommand = new Command()
   .name("nosdump")
@@ -117,6 +118,8 @@ async function executeNosdump(
   cmdOptions: NosdumpCmdOptions,
   cmdArgs: [string, ...string[]],
 ) {
+  const config = await NosdumpConfigRepo.load();
+
   // read from stdin if it's piped (not terminal)
   const stdinText = Deno.stdin.isTerminal()
     ? ""
@@ -129,11 +132,12 @@ async function executeNosdump(
     cmdArgs,
     stdinText,
     currUnixtimeSec,
+    config,
   );
   if (!parseInputRes.isOk) {
-    console.error(parseInputRes.err.header + ":");
+    console.error(`${parseInputRes.err.header}:`);
     for (const msg of parseInputRes.err.msgs) {
-      console.error(msg);
+      console.error(`* ${msg}`);
     }
     Deno.exit(1);
   }
@@ -158,6 +162,7 @@ export function parseInput(
   cmdArgs: [string, ...string[]],
   stdinText: string,
   currUnixtimeSec: number,
+  config: NosdumpConfigRepo,
 ): Result<NosdumpParams & { miscOptions: MiscOptions }, ParseInputErrVal> {
   // read stdin and parse as a filter
   const parseStdinRes = parseFilterFromText(stdinText, cmdOptions.stdinReq);
@@ -187,9 +192,18 @@ export function parseInput(
     dryRun: cmdOptions.dryRun,
   });
 
+  // resolve relay specifiers (raw URLs, aliases)
+  const resolveRelaysRes = config.resolveRelaySpecifiers(cmdArgs);
+  if (!resolveRelaysRes.isOk) {
+    return Result.err({
+      header: "Failed to resolve relay specifiers",
+      msgs: resolveRelaysRes.err,
+    });
+  }
+
   // filter props specified by CLI option overrides props parsed from stdin.
   return Result.ok({
-    relayUrls: cmdArgs,
+    relayUrls: resolveRelaysRes.val,
     fetchFilter: { ...stdinFilter, ...optFilter },
     fetchTimeRange: { ...stdinTimeRange, ...optTimeRange },
     fetchOptions,
