@@ -28,6 +28,7 @@ async function getAlias(alias: string) {
 
 async function setAlias(alias: string, url: string) {
   const conf = await NosdumpConfigRepo.load();
+
   if (conf.relayAliases.has(alias)) {
     const confirmed = await promptConfirmation({
       message: `Relay alias "${alias}" already exists. Overwrite?`,
@@ -37,6 +38,7 @@ async function setAlias(alias: string, url: string) {
       return;
     }
   }
+
   conf.relayAliases.set(alias, url);
   await conf.save();
 }
@@ -77,11 +79,19 @@ const aliasUnsetCmd = new Command()
     await unsetAlias(alias);
   });
 
-const description = `Manage aliases for relays.
+const descriptionText = `Manage relay aliases.
 
-If you omit both arguments, lists all aliases (same as "nosdump alias list").
-If you only provide <alias>, shows the relay URL of the alias (same as "nosdump alias get <alias>").
-If you provide both <alias> and <relay-URL>, sets a new alias (same as "nosdump alias set <alias> <relay-URL>").`;
+You set aliases for relay URLs:  
+  $ nosdump alias set foo wss://relay.foo.com/
+  $ nosdump alias set bar wss://relay.bar.com/
+
+then you can refer to relays with aliases when you dump events:
+  $ nosdump --kinds 1 foo bar
+
+Shorthands:
+  * nosdump alias                     === nosdump alias list
+  * nosdump alias <alias>             === nosdump alias get <alias>
+  * nosdump alias <alias> <relay-URL> === nosdump alias set <alias> <relay-URL>`;
 
 export const aliasCommand = new Command()
   .command("list", aliasListCmd)
@@ -89,7 +99,7 @@ export const aliasCommand = new Command()
   .command("set", aliasSetCmd)
   .command("unset", aliasUnsetCmd)
   .reset()
-  .description(description)
+  .description(descriptionText)
   .option("--json", "Output as JSON.", { default: false })
   .arguments("[alias:string] [relay-URL:string]")
   .action(async ({ json }, alias, relayUrl) => {
@@ -103,6 +113,6 @@ export const aliasCommand = new Command()
       await getAlias(alias);
       return;
     }
-    // `nosdump alias <alias> <relay-url>` === `nosdump alias set <alias> <relay-url>`
+    // `nosdump alias <alias> <relay-URL>` === `nosdump alias set <alias> <relay-URL>`
     await setAlias(alias, relayUrl);
   });
