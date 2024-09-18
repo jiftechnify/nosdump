@@ -36,6 +36,23 @@ Deno.test("NosdumpConfigRepo", async (t) => {
       ]);
     });
 
+    await t.step("normalizes raw relay URLs", () => {
+      const repo = NosdumpConfigRepo.fromConfigObjectForTesting({
+        relay: {},
+      });
+      const resolved = repo.resolveRelaySpecifiers([
+        "wss://example.com",
+        "wss://example.com/",
+        "wss://example.com/sub",
+        "wss://example.com/sub/",
+      ]);
+      assert(resolved.isOk);
+      assertArrayIncludes(resolved.val, [
+        "wss://example.com/",
+        "wss://example.com/sub",
+      ]);
+    });
+
     await t.step("returns error if an alias is not found", () => {
       const repo = NosdumpConfigRepo.fromConfigObjectForTesting({
         relay: {

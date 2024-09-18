@@ -107,7 +107,7 @@ export class NosdumpConfigRepo {
     for (const rspec of relaySpecs) {
       // resolve valid relay URL as is
       if (relayUrlIsValid(rspec)) {
-        resolved.add(rspec);
+        resolved.add(normalizeRelayUrl(rspec));
         continue;
       }
 
