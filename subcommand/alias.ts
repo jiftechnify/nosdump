@@ -2,6 +2,7 @@ import { Command } from "@cliffy/command";
 import { Table } from "@cliffy/table";
 
 import { NosdumpConfigRepo } from "../config.ts";
+import { promptConfirmation } from "../prompt.ts";
 
 async function listAliases(asJson: boolean) {
   const conf = await NosdumpConfigRepo.load();
@@ -27,6 +28,15 @@ async function getAlias(alias: string) {
 
 async function setAlias(alias: string, url: string) {
   const conf = await NosdumpConfigRepo.load();
+  if (conf.relayAliases.has(alias)) {
+    const confirmed = await promptConfirmation({
+      message: `Relay alias "${alias}" already exists. Overwrite?`,
+      default: false,
+    });
+    if (!confirmed) {
+      return;
+    }
+  }
   conf.relayAliases.set(alias, url);
   await conf.save();
 }
