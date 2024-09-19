@@ -71,7 +71,7 @@ then you refer to relays with aliases:
 
 ```sh
 # Dump all text events from wss://relay.damus.io & wss://welcome.nostr.wine
-nosdump --kinds 1 damus welcome > dump.jsonl
+nosdump --kinds 1 damus welcome
 ```
 
 To reveal all the subcommands for the relay aliases management, run `nosdump alias --help`.
