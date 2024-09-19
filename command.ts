@@ -33,7 +33,7 @@ export const nosdumpCommand = new Command()
   .name("nosdump")
   .version("0.5.0")
   .description("A tool to dump events stored in Nostr relays")
-  .usage("[options...] <relay-URLs...>")
+  .usage("[options...] <relays...>")
   .command("completions", new CompletionsCommand())
   .command(
     "upgrade",
@@ -108,7 +108,7 @@ export const nosdumpCommand = new Command()
       default: false,
     },
   )
-  .arguments("<relay-URLs...>")
+  .arguments("<relays...>")
   .action((options, ...args) => {
     executeNosdump(options, args);
   });
@@ -193,7 +193,7 @@ export function parseInput(
     dryRun: cmdOptions.dryRun,
   });
 
-  // resolve relay specifiers (raw URLs, aliases)
+  // resolve relay specifiers (raw URLs, aliases, or relay set spreads)
   const resolveRelaysRes = config.resolveRelaySpecifiers(cmdArgs);
   if (!resolveRelaysRes.isOk) {
     return Result.err({
