@@ -4,6 +4,7 @@
   "exports": "./mod.ts",
   "tasks": {
     "static-checks": "deno check --no-lock mod.ts & deno fmt --check & deno lint",
+    "publish-check": "deno publish --dry-run",
     "tidy": "rm -f deno.lock && deno cache \"*.ts\""
   },
   "imports": {
@@ -21,11 +22,20 @@
     "date-fns": "npm:date-fns@3.6.0",
     "nostr-fetch": "npm:nostr-fetch@0.15.1",
     "nostr-tools/": "npm:/nostr-tools@2.7.2/",
-    "xdg": "https://deno.land/x/xdg_portable@v10.6.0/src/mod.deno.ts",
+    "xdg-portable": "./vendor/deno.land/x/xdg_portable@v10.6.0/src/mod.deno.ts",
     "zod": "npm:zod@3.23.8",
-    "zod-validation-error": "npm:zod-validation-error@3.3.1"
+    "zod-validation-error": "npm:zod-validation-error@3.3.1",
+    "https://deno.land/": "./vendor/deno.land/"
   },
   "fmt": {
-    "lineWidth": 140
+    "lineWidth": 140,
+    "exclude": [
+      "vendor/"
+    ]
+  },
+  "lint": {
+    "exclude": [
+      "vendor/"
+    ]
   }
 }

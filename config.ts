@@ -1,4 +1,4 @@
-import xdg from "xdg";
+import xdg from "xdg-portable";
 import { resolve } from "@std/path";
 import * as yaml from "@std/yaml";
 import { distinct, union, withoutAll } from "@std/collections";
