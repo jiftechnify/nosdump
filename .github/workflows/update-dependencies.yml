@@ -41,7 +41,7 @@ jobs:
           } >> $GITHUB_OUTPUT
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           commit-message: "chore(deps): Update deno dependencies"
           title: Update Deno dependencies
