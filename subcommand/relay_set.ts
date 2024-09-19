@@ -1,6 +1,9 @@
 import { Command } from "@cliffy/command";
 import { NosdumpConfigRepo } from "../config.ts";
-import { promptConfirmation } from "../prompt.ts";
+import {
+  printErrorHeaderAndMessages,
+  promptConfirmation,
+} from "../cli_helpers.ts";
 
 async function listRelaySets(asJson: boolean) {
   const config = await NosdumpConfigRepo.load();
@@ -43,10 +46,10 @@ async function addRelaysToSet(name: string, relays: string[]) {
   const config = await NosdumpConfigRepo.load();
   const resolveRes = config.resolveRelaySpecifiers(relays);
   if (!resolveRes.isOk) {
-    console.error("Failed to resolve relay specifiers:");
-    for (const e of resolveRes.err) {
-      console.error(e);
-    }
+    printErrorHeaderAndMessages(
+      "Failed to resolve relay specifiers",
+      resolveRes.err,
+    );
     Deno.exit(1);
   }
 
@@ -60,10 +63,10 @@ async function removeRelaysFromSet(name: string, relays: string[]) {
   const config = await NosdumpConfigRepo.load();
   const resolveRes = config.resolveRelaySpecifiers(relays);
   if (!resolveRes.isOk) {
-    console.error("Failed to resolve relay specifiers:");
-    for (const e of resolveRes.err) {
-      console.error(e);
-    }
+    printErrorHeaderAndMessages(
+      "Failed to resolve relay specifiers",
+      resolveRes.err,
+    );
     Deno.exit(1);
   }
 

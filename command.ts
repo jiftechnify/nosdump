@@ -27,6 +27,7 @@ import type { MiscOptions, NosdumpParams } from "./types.ts";
 import { NosdumpConfigRepo } from "./config.ts";
 import { relayAliasCommand } from "./subcommand/relay_alias.ts";
 import { relaySetCommand } from "./subcommand/relay_set.ts";
+import { printErrorHeaderAndMessages } from "./cli_helpers.ts";
 
 export const nosdumpCommand = new Command()
   .name("nosdump")
@@ -137,10 +138,8 @@ async function executeNosdump(
     config,
   );
   if (!parseInputRes.isOk) {
-    console.error(`${parseInputRes.err.header}:`);
-    for (const msg of parseInputRes.err.msgs) {
-      console.error(`* ${msg}`);
-    }
+    const { header, msgs } = parseInputRes.err;
+    printErrorHeaderAndMessages(header, msgs);
     Deno.exit(1);
   }
   const { miscOptions, ...params } = parseInputRes.val;

@@ -34,3 +34,13 @@ export async function promptConfirmation(params: PromptConfirmationParams) {
       throw new Error("promptConfirmation: unreachable");
   }
 }
+
+export function printErrorHeaderAndMessages(
+  header: string,
+  messages: string[],
+) {
+  console.error(`${header}:`);
+  for (const msg of messages) {
+    console.error(`  * ${msg}`);
+  }
+}
