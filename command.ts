@@ -27,7 +27,7 @@ import { printErrorHeaderAndMessages } from "./cli_helpers.ts";
 
 export const nosdumpCommand = new Command()
   .name("nosdump")
-  .version("0.5.0")
+  .version("0.6.1")
   .description("A tool to dump events stored in Nostr relays")
   .usage("[options...] <relays...>")
   .command("completions", new CompletionsCommand())
