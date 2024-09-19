@@ -192,8 +192,8 @@ Deno.test("RelaySetsOps", async (t) => {
 
         // make sure that set "foo" now exists and contains the relay added
         assert(sets.has("foo"));
-        assertEquals(sets.get("foo"), ["wss://foo-1.example.com/"]);
-        assertEquals(sets.list(), { foo: ["wss://foo-1.example.com/"] });
+        assertEquals(sets.listRelaysOf("foo"), ["wss://foo-1.example.com/"]);
+        assertEquals(sets.listAll(), { foo: ["wss://foo-1.example.com/"] });
       },
     );
 
@@ -205,7 +205,7 @@ Deno.test("RelaySetsOps", async (t) => {
       ]);
 
       assert(sets.has("foo"));
-      assertEquals(sets.get("foo"), [
+      assertEquals(sets.listRelaysOf("foo"), [
         "wss://foo-1.example.com/",
         "wss://foo-2.example.com/",
         "wss://foo-3.example.com/",
@@ -221,7 +221,7 @@ Deno.test("RelaySetsOps", async (t) => {
       assert(removed);
 
       assert(sets.has("foo"));
-      assertEquals(sets.get("foo"), [
+      assertEquals(sets.listRelaysOf("foo"), [
         "wss://foo-1.example.com/",
         "wss://foo-3.example.com/",
       ]);
@@ -231,19 +231,19 @@ Deno.test("RelaySetsOps", async (t) => {
       sets.copy("foo", "bar");
 
       assert(sets.has("foo") && sets.has("bar"));
-      assertEquals(sets.get("bar"), [
+      assertEquals(sets.listRelaysOf("bar"), [
         "wss://foo-1.example.com/",
         "wss://foo-3.example.com/",
       ]);
 
       // adding relays to the copy should not affect the original
       sets.addRelayUrlsTo("bar", ["wss://bar.example.com/"]);
-      assertEquals(sets.get("bar"), [
+      assertEquals(sets.listRelaysOf("bar"), [
         "wss://foo-1.example.com/",
         "wss://foo-3.example.com/",
         "wss://bar.example.com/",
       ]);
-      assertEquals(sets.get("foo"), [
+      assertEquals(sets.listRelaysOf("foo"), [
         "wss://foo-1.example.com/",
         "wss://foo-3.example.com/",
       ]);
@@ -253,7 +253,7 @@ Deno.test("RelaySetsOps", async (t) => {
       sets.rename("bar", "bar2");
 
       assert(!sets.has("bar") && sets.has("bar2"));
-      assertEquals(sets.get("bar2"), [
+      assertEquals(sets.listRelaysOf("bar2"), [
         "wss://foo-1.example.com/",
         "wss://foo-3.example.com/",
         "wss://bar.example.com/",
@@ -266,7 +266,7 @@ Deno.test("RelaySetsOps", async (t) => {
 
       // make sure that the set is deleted
       assert(!sets.has("foo"));
-      assertEquals(sets.get("foo"), undefined);
+      assertEquals(sets.listRelaysOf("foo"), undefined);
     });
   });
 
@@ -281,7 +281,7 @@ Deno.test("RelaySetsOps", async (t) => {
         "wss://foo-2.example.com/",
       ]);
 
-      assertEquals(sets.get("foo"), [
+      assertEquals(sets.listRelaysOf("foo"), [
         "wss://foo-1.example.com/",
         "wss://foo-2.example.com/",
       ]);
@@ -296,7 +296,7 @@ Deno.test("RelaySetsOps", async (t) => {
         "wss://example.com/sub/",
       ]);
 
-      assertEquals(sets.get("foo"), [
+      assertEquals(sets.listRelaysOf("foo"), [
         "wss://example.com/",
         "wss://example.com/sub",
       ]);
@@ -338,7 +338,7 @@ Deno.test("RelaySetsOps", async (t) => {
 
       // URLs with no trailing slash in arguments should be normalized before matching against existing URLs,
       // so "wss://foo-1.example.com/" should be removed by the URL without trailing slash.
-      assertEquals(sets.get("foo"), [
+      assertEquals(sets.listRelaysOf("foo"), [
         "wss://foo-2.example.com/",
       ]);
     });
@@ -352,7 +352,7 @@ Deno.test("RelaySetsOps", async (t) => {
       sets.removeRelayUrlsFrom("foo", ["wss://foo-2.example.com/"]);
 
       assert(!sets.has("foo"));
-      assertEquals(sets.get("foo"), undefined);
+      assertEquals(sets.listRelaysOf("foo"), undefined);
     });
   });
 
@@ -435,7 +435,7 @@ Deno.test("RelaySetsOps", async (t) => {
 
     assert(sets.has("foo"));
     assert(!sets.has("bar"));
-    assertEquals(sets.get("bar"), undefined);
+    assertEquals(sets.listRelaysOf("bar"), undefined);
   });
 
   await t.step(
@@ -443,18 +443,18 @@ Deno.test("RelaySetsOps", async (t) => {
     () => {
       const sets = new RelaySetsOps({ foo: ["wss://foo.example.com/"] });
 
-      const l = sets.list();
+      const l = sets.listAll();
 
       l.bar = ["wss://bar.example.com/"];
       assert(!sets.has("bar"));
-      assertEquals(sets.get("bar"), undefined);
+      assertEquals(sets.listRelaysOf("bar"), undefined);
 
       l.foo.push("wss://unknown.example.com/");
-      assertEquals(sets.get("foo"), ["wss://foo.example.com/"]);
+      assertEquals(sets.listRelaysOf("foo"), ["wss://foo.example.com/"]);
 
       delete l.foo;
       assert(sets.has("foo"));
-      assertEquals(sets.get("foo"), ["wss://foo.example.com/"]);
+      assertEquals(sets.listRelaysOf("foo"), ["wss://foo.example.com/"]);
     },
   );
 
@@ -463,12 +463,12 @@ Deno.test("RelaySetsOps", async (t) => {
     () => {
       const sets = new RelaySetsOps({ foo: ["wss://foo.example.com/"] });
 
-      const foo = sets.get("foo");
+      const foo = sets.listRelaysOf("foo");
 
       assert(foo !== undefined);
 
       foo.push("wss://unknown.example.com/");
-      assertEquals(sets.get("foo"), ["wss://foo.example.com/"]);
+      assertEquals(sets.listRelaysOf("foo"), ["wss://foo.example.com/"]);
     },
   );
 });

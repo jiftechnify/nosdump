@@ -75,7 +75,7 @@ export const NosdumpConfigSchema = z.object({
           "relay URL must start with wss:// or ws://",
         )
         .transform((url) => normalizeRelayUrl(url)),
-    ),
+    ).default({}),
     sets: z.record(
       z.string()
         .regex(
@@ -91,7 +91,7 @@ export const NosdumpConfigSchema = z.object({
           )
           .transform((url) => normalizeRelayUrl(url)),
       ).transform((urls) => distinct(urls)),
-    ),
+    ).default({}),
   }),
 });
 type NosdumpConfig = z.infer<typeof NosdumpConfigSchema>;
@@ -237,13 +237,13 @@ type RelaySets = NosdumpConfig["relay"]["sets"];
 export class RelaySetsOps {
   constructor(private sets: RelaySets) {}
 
-  list(): RelaySets {
+  listAll(): RelaySets {
     return Object.fromEntries(
       Object.entries(this.sets).map(([name, set]) => [name, [...set]]),
     );
   }
 
-  get(name: string): string[] | undefined {
+  listRelaysOf(name: string): string[] | undefined {
     const set = this.sets[name];
     return set !== undefined ? [...set] : undefined;
   }
@@ -256,7 +256,7 @@ export class RelaySetsOps {
     assertRelaySetNameIsValid(name);
     assertRelayUrlsAreValid(relayUrls);
 
-    const set = this.get(name) ?? [];
+    const set = this.listRelaysOf(name) ?? [];
     const newSet = union(set, relayUrls.map(normalizeRelayUrl));
 
     if (newSet.length === set.length) {
@@ -275,7 +275,7 @@ export class RelaySetsOps {
   }
 
   removeRelayUrlsFrom(name: string, relayUrls: string[]): boolean {
-    const set = this.get(name);
+    const set = this.listRelaysOf(name);
     if (set === undefined) {
       return false;
     }
@@ -301,7 +301,7 @@ export class RelaySetsOps {
       );
     }
     assertRelaySetNameIsValid(dstName);
-    const srcSet = this.get(srcName);
+    const srcSet = this.listRelaysOf(srcName);
     if (srcSet === undefined) {
       throw new ValidationError(`relay set "${srcName}" not found.`);
     }
@@ -316,7 +316,7 @@ export class RelaySetsOps {
       );
     }
     assertRelaySetNameIsValid(newName);
-    const oldSet = this.get(oldName);
+    const oldSet = this.listRelaysOf(oldName);
     if (oldSet === undefined) {
       throw new ValidationError(`relay set "${oldName}" not found.`);
     }

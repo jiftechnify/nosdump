@@ -21,6 +21,7 @@ async function getAlias(alias: string) {
   const conf = await NosdumpConfigRepo.load();
   const url = conf.relayAliases.get(alias);
   if (url === undefined) {
+    console.error(`Relay alias "${alias}" not found.`);
     Deno.exit(1);
   }
   console.log(url);
@@ -35,7 +36,8 @@ async function setAlias(alias: string, url: string) {
       default: false,
     });
     if (!confirmed) {
-      return;
+      console.error("Operation cancelled.");
+      Deno.exit(1);
     }
   }
 
@@ -59,7 +61,7 @@ const aliasListCmd = new Command()
   });
 
 const aliasGetCmd = new Command()
-  .description("Show the relay URL associated with the alias.")
+  .description("Show a relay URL associated with an alias.")
   .arguments("<alias:string>")
   .action(async (_, alias) => {
     await getAlias(alias);

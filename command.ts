@@ -24,8 +24,9 @@ import { fromError } from "zod-validation-error";
 import { dumpNostrEvents } from "./dump.ts";
 import { Result } from "./types.ts";
 import type { MiscOptions, NosdumpParams } from "./types.ts";
-import { aliasCommand } from "./subcommand/alias.ts";
 import { NosdumpConfigRepo } from "./config.ts";
+import { aliasCommand } from "./subcommand/alias.ts";
+import { relaySetCommand } from "./subcommand/relay_set.ts";
 
 export const nosdumpCommand = new Command()
   .name("nosdump")
@@ -47,6 +48,7 @@ export const nosdumpCommand = new Command()
     }),
   )
   .command("alias", aliasCommand)
+  .command("relay-set", relaySetCommand).alias("rset")
   .reset()
   .type("kind", kindType)
   .type("tag-spec", tagSpecType)
