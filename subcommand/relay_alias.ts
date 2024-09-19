@@ -96,10 +96,10 @@ Shorthands:
   * nosdump alias <alias> <relay-URL> === nosdump alias set <alias> <relay-URL>`;
 
 export const relayAliasCommand = new Command()
-  .command("list", aliasListCmd)
+  .command("list", aliasListCmd).alias("ls")
   .command("get", aliasGetCmd)
   .command("set", aliasSetCmd)
-  .command("unset", aliasUnsetCmd)
+  .command("unset", aliasUnsetCmd).alias("rm")
   .reset()
   .description(descriptionText)
   .option("--json", "Output as JSON.", { default: false })
