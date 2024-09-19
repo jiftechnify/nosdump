@@ -1,4 +1,5 @@
 import { Command } from "@cliffy/command";
+import { colors } from "@cliffy/ansi/colors";
 import { NosdumpConfigRepo } from "../config.ts";
 import {
   printErrorHeaderAndMessages,
@@ -127,7 +128,7 @@ const relaySetListAllCommand = new Command()
   });
 
 const relaySetListCommand = new Command()
-  .description("List relays in a relay set.")
+  .description("List all relay URLs in a relay set.")
   .option("--json", "Output as JSON.", { default: false })
   .arguments("<set:string>")
   .action(async ({ json }, name) => {
@@ -135,14 +136,18 @@ const relaySetListCommand = new Command()
   });
 
 const relaySetAddCommand = new Command()
-  .description("Add relays to a relay set.")
+  .description(
+    "Add relays to a relay set.\n\nIf the target relay set does not exist, creates new one.",
+  )
   .arguments("<set:string> <relays...:string>")
   .action(async (_, name, ...relays) => {
     await addRelaysToSet(name, relays);
   });
 
 const relaySetRemoveCommand = new Command()
-  .description("Remove relays from a relay set.")
+  .description(
+    "Remove relays from a relay set.\n\nIf removal of relays emptied out the relay set, deletes it automatically.\n\nTo delete the whole relay set, use `nosdump relay-set delete` instead.",
+  )
   .arguments("<set:string> <relays...:string>")
   .action(async (_, name, ...relays) => {
     await removeRelaysFromSet(name, relays);
@@ -171,11 +176,13 @@ const relaySetDeleteCommand = new Command()
 
 const descriptionText = `Manage relay sets.
 
-You add multiple relays to a single relay set:
+You group multiple relays into "relay sets":
   $ nosdump relay-set add set1 wss://relay1-a.com wss://relay1-b.com
   $ nosdump relay-set add set2 wss://relay2-a.com wss://relay2-b.com
 
-then you can specify all relays in the relay set at once as dump targets, using the "...<relay-set>" syntax:
+then, with the ${
+  colors.bold.green("...<relay-set>")
+} syntax, you specify all the relays in the relay set as dump targets:
   $ nosdump --kinds 1 ...set1 ...set2
 
 Shorthands:

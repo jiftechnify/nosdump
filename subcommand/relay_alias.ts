@@ -83,7 +83,7 @@ const aliasUnsetCmd = new Command()
 
 const descriptionText = `Manage relay aliases.
 
-You set aliases for relay URLs:  
+You set "aliases" for relay URLs:  
   $ nosdump alias set foo wss://relay.foo.com/
   $ nosdump alias set bar wss://relay.bar.com/
 
