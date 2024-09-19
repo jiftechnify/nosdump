@@ -26,5 +26,8 @@ jobs:
       - name: Run static checks(type check, format, lint)
         run: deno task static-checks
 
+      - name: Run JSR publish check
+        run: deno task publish-check
+
       - name: Run tests
         run: deno test
