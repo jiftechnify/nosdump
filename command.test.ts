@@ -1,13 +1,9 @@
-import {
-  assert,
-  assertArrayIncludes,
-  assertEquals,
-  assertThrows,
-} from "@std/assert";
+import { assert, assertArrayIncludes, assertEquals, assertThrows } from "@std/assert";
 import { parseISO } from "date-fns";
 
 import { kindType, parseInput, tagSpecType } from "./command.ts";
 import type { NosdumpCmdOptions } from "./command.ts";
+import { NosdumpConfigRepo } from "./config.ts";
 
 const defaultCmdOpts: NosdumpCmdOptions = {
   dryRun: false,
@@ -15,21 +11,33 @@ const defaultCmdOpts: NosdumpCmdOptions = {
   stdinReq: false,
 };
 
-const dummyRelayUrls: [string] = ["wss://example.com"];
+const dummyRelayUrls: [string] = ["wss://example.com/"];
+const emptyConfig = NosdumpConfigRepo.fromConfigObjectForTesting({
+  relay: { aliases: {} },
+});
 
-Deno.test("parseInput", async (t) => {
-  await t.step("arguments as relay URLs", () => {
+Deno.test("parseInput()", async (t) => {
+  await t.step("resolves rest arguments as relay specifiers", () => {
+    const config = NosdumpConfigRepo.fromConfigObjectForTesting({
+      relay: {
+        aliases: {
+          "bar": "wss://bar.example.com/",
+        },
+      },
+    });
+
     const res = parseInput(
       defaultCmdOpts,
-      ["wss://foo.example.com", "wss://bar.example.com"],
+      ["wss://foo.example.com/", "bar"],
       "",
       0,
+      config,
     );
 
     assert(res.isOk);
-    assertEquals(res.val.relayUrls, [
-      "wss://foo.example.com",
-      "wss://bar.example.com",
+    assertArrayIncludes(res.val.relayUrls, [
+      "wss://foo.example.com/",
+      "wss://bar.example.com/",
     ]);
   });
 
@@ -77,6 +85,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -134,6 +143,7 @@ Deno.test("parseInput", async (t) => {
         until: 200,
       }),
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -179,6 +189,7 @@ Deno.test("parseInput", async (t) => {
         },
       ]),
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -208,6 +219,7 @@ Deno.test("parseInput", async (t) => {
         until: 200,
       }),
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -240,6 +252,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -261,8 +274,7 @@ Deno.test("parseInput", async (t) => {
     hex: "c824e1184d4f3660097d8299632ac723f5bfaea1eb569867f4924f2f0713a321",
     note: "note1eqjwzxzdfumxqztas2vkx2k8y06mlt4padtfsel5jf8j7pcn5vsssd2g8m",
     // nevent with relay hint
-    nevent:
-      "nevent1qqsvsf8prpx57dnqp97c9xtr9trj8adl46s7k45cvl6fyne0quf6xggprfmhxue69uhkuun9d3shjtnr94ehgetvd3shytnwv46qhq36uw",
+    nevent: "nevent1qqsvsf8prpx57dnqp97c9xtr9trj8adl46s7k45cvl6fyne0quf6xggprfmhxue69uhkuun9d3shjtnr94ehgetvd3shytnwv46qhq36uw",
   };
   await t.step("NIP-19 `note` as event ID", () => {
     const res = parseInput(
@@ -279,6 +291,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -302,6 +315,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -316,8 +330,7 @@ Deno.test("parseInput", async (t) => {
     hex: "d1d1747115d16751a97c239f46ec1703292c3b7e9988b9ebdd4ec4705b15ed44",
     npub: "npub168ghgug469n4r2tuyw05dmqhqv5jcwm7nxytn67afmz8qkc4a4zqsu2dlc",
     // nprofile with relay hint
-    nprofile:
-      "nprofile1qqsdr5t5wy2aze63497z886xastsx2fv8dlfnz9ea0w5a3rstv2763qprfmhxue69uhkuun9d3shjtnr94ehgetvd3shytnwv46q3ujeza",
+    nprofile: "nprofile1qqsdr5t5wy2aze63497z886xastsx2fv8dlfnz9ea0w5a3rstv2763qprfmhxue69uhkuun9d3shjtnr94ehgetvd3shytnwv46q3ujeza",
   };
   await t.step("NIP-19 `npub` as pubkey", () => {
     const res = parseInput(
@@ -334,6 +347,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -357,6 +371,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -381,6 +396,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -400,6 +416,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       0,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -421,11 +438,10 @@ Deno.test("parseInput", async (t) => {
         dummyRelayUrls,
         "",
         0,
+        emptyConfig,
       );
-      const sinceOffsetSec =
-        parseISO("2022-01-01T00:00:00").getTimezoneOffset() * 60;
-      const untilOffsetSec =
-        parseISO("2023-01-01T00:00:00").getTimezoneOffset() * 60;
+      const sinceOffsetSec = parseISO("2022-01-01T00:00:00").getTimezoneOffset() * 60;
+      const untilOffsetSec = parseISO("2023-01-01T00:00:00").getTimezoneOffset() * 60;
 
       assert(res.isOk);
       assertEquals(res.val.fetchTimeRange, {
@@ -446,6 +462,7 @@ Deno.test("parseInput", async (t) => {
       dummyRelayUrls,
       "",
       now,
+      emptyConfig,
     );
 
     assert(res.isOk);
@@ -468,6 +485,7 @@ Deno.test("parseInput", async (t) => {
         dummyRelayUrls,
         "",
         0,
+        emptyConfig,
       );
       assert(!res.isOk);
     }
@@ -486,6 +504,7 @@ Deno.test("parseInput", async (t) => {
         dummyRelayUrls,
         "",
         0,
+        emptyConfig,
       );
       assert(!res.isOk);
     }
@@ -504,6 +523,7 @@ Deno.test("parseInput", async (t) => {
         dummyRelayUrls,
         "",
         0,
+        emptyConfig,
       );
       assert(!res.isOk);
     }
@@ -521,6 +541,7 @@ Deno.test("parseInput", async (t) => {
         dummyRelayUrls,
         JSON.stringify(i),
         0,
+        emptyConfig,
       );
       assert(!res.isOk);
     }
@@ -540,6 +561,7 @@ Deno.test("parseInput", async (t) => {
           dummyRelayUrls,
           JSON.stringify(i),
           0,
+          emptyConfig,
         );
         assert(!res.isOk);
       }
@@ -584,9 +606,7 @@ Deno.test("tagSpecType validator", async (t) => {
   await t.step("rejects malformed tag spec", () => {
     const inputs = ["t", "t:", "multiLetterTag:hoge"];
     for (const i of inputs) {
-      assertThrows(() =>
-        tagSpecType({ value: i, label: "", name: "", type: "" })
-      );
+      assertThrows(() => tagSpecType({ value: i, label: "", name: "", type: "" }));
     }
   });
 });

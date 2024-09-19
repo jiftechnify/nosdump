@@ -3,10 +3,8 @@
 [![JSR](https://jsr.io/badges/@jiftechnify/nosdump)](https://jsr.io/@jiftechnify/nosdump)
 [![deno.land](https://shield.deno.dev/x/nosdump)](https://deno.land/x/nosdump)
 
-A command line tool which dumps events stored in
-[Nostr](https://github.com/nostr-protocol/nostr) relays, in
-[JSON-Lines](https://jsonlines.org/) format (also known as
-[NDJSON](http://ndjson.org/)).
+A command line tool which dumps events stored in [Nostr](https://github.com/nostr-protocol/nostr) relays, in
+[JSON-Lines](https://jsonlines.org/) format (also known as [NDJSON](http://ndjson.org/)).
 
 ## Installation
 
@@ -15,19 +13,16 @@ A command line tool which dumps events stored in
 [Install Deno](https://deno.land/manual/getting_started/installation) and run:
 
 ```sh
-deno install --allow-net "jsr:@jiftechnify/nosdump"
+deno install -A "jsr:@jiftechnify/nosdump@0.5.0"
 ```
 
-### With pre-built binaries (easy)
+### With Pre-built Binaries (easy)
 
-Download pre-built binaries from the
-[releases](https://github.com/jiftechnify/nosdump/releases) page.
+Download pre-built binaries from the [releases](https://github.com/jiftechnify/nosdump/releases) page.
 
-## Examples
+## Basic Usage
 
-### Basics
-
-Dump all events stored in the relay `wss://relay.damus.io` to a file:
+Dump all events stored in the relay `wss://relay.damus.io`:
 
 ```sh
 nosdump wss://relay.damus.io > dump.jsonl
@@ -42,13 +37,13 @@ nosdump -k 1,7 wss://relay.damus.io > dump.jsonl
 Dump all your events:
 
 ```sh
-nosdump -a <your pubkey> wss://relay.damus.io > dump.jsonl
+nosdump -a ${YOUR_PUBKEY} wss://relay.damus.io > dump.jsonl
 ```
 
 Dump all reply events to you:
 
 ```sh
-nosdump -k 1 -p <your pubkey> wss://relay.damus.io > dump.jsonl
+nosdump -k 1 -p ${YOUR_PUBKEY} wss://relay.damus.io > dump.jsonl
 ```
 
 Dump all events published in the past 24 hours:
@@ -57,9 +52,66 @@ Dump all events published in the past 24 hours:
 nosdump -s 24h wss://relay.damus.io > dump.jsonl
 ```
 
-### Various input formats
+## Features
 
-You can use following formats to refer **events**:
+### Shorthands for Relay URLs
+
+You may feel cumbersome when specifying relays with full URLs. It's time **relay aliases** and **relay sets** come in handy!
+
+#### Relay Aliases
+
+You set aliases for relay URLs:
+
+```sh
+nosdump alias damus wss://relay.damus.io
+nosdump alias welcome wss://welcome.nostr.wine
+```
+
+then you refer to relays with aliases:
+
+```sh
+# Dump all text events from wss://relay.damus.io & wss://welcome.nostr.wine
+nosdump --kinds 1 damus welcome > dump.jsonl
+```
+
+To reveal all the subcommands for the relay aliases management, run `nosdump alias --help`.
+
+#### Relay Sets
+
+You group multiple relays into "relay sets":
+
+```sh
+nosdump relay-set add mega-relays wss://relay.damus.io wss://nos.lol
+nosdump relay-set add mega-relays wss://relay.nostr.band
+```
+
+then, with the **`...<relay-set>`** syntax, you specify all the relays in the relay set as dump targets:
+
+```sh
+# Dump all text events posted in last 10 minutes from "mega relays"!
+nosdump --kinds 1 --since 10m ...mega-relays
+```
+
+To reveal all the subcommands for the relay sets management, run `nosdump relay-set --help`.
+
+#### Put Them Together
+
+Of course, you can use raw relay URLs, relay aliases and relay sets together to specify relays to dump events!
+
+```sh
+nosdump --kinds 1 --since 10m wss://nrelay.c-stellar.net welcome ...mega-relays
+```
+
+> **Note**
+>
+> Configured relay aliases and relay sets are saved in a config file on your local file system. The location of the config file is
+> `${CONFIG_DIR}/nosdump/config.yaml`, where `${CONFIG_DIR}` is
+> [the standard directory for user-specific configs](https://github.com/rivy/js.xdg-portable?tab=readme-ov-file#xdgconfig-string) on the
+> platform you use.
+
+### Various Input Formats
+
+You can use following formats to refer **events by ids**:
 
 - Hex event ID
 - NIP-19 identifier for event (`note1...` / `nevent1...`)
@@ -99,11 +151,9 @@ You can use following formats to specify **timestamps**:
 
 - Unixtime in seconds
 - ISO 8601 datetime string (e.g. `2023-07-19T23:06:16`)
-  - If you don't specify a timezone explicitly, it will be interpreted as
-    **local time**.
+  - If you don't specify a timezone explicitly, it will be interpreted as **local time**.
 - Relative time represented by a duration string (e.g. `6h`, means 6 hours ago)
-  - It uses [duration.js](https://jsr.io/@retraigo/duration) to parse
-    duration strings.
+  - It uses [duration.js](https://jsr.io/@retraigo/duration) to parse duration strings.
 
 ```sh
 # Unixtime in seconds
@@ -119,20 +169,17 @@ nosdump -s 2023-07-19T12:00:00 -u 2023-07-19T15:00:00 wss://relay.damus.io
 nosdump -s 1h -u 30m wss://relay.damus.io
 ```
 
-### Read a filter from stdin
+### Read a Filter from Stdin
 
-nosdump parses stdin as a Nostr filter by default, so the following command
-works as expected:
+nosdump parses stdin as a Nostr filter by default, so the following command works as expected:
 
 ```sh
 echo '{ "kinds": [1, 7] }' | nosdump wss://relay.damus.io > dump.jsonl
 ```
 
-If `-R` (`--stdin-req`) flag is specified, nosdump parses stdin as _a REQ
-message_ instead and extract the _first_ filter from it.
+If `-R` (`--stdin-req`) flag is specified, nosdump parses stdin as _a REQ message_ instead and extract the _first_ filter from it.
 
-This feature makes nosdump interoperable with
-[nostreq](https://github.com/blakejakopovic/nostreq):
+This feature makes nosdump interoperable with [nostreq](https://github.com/blakejakopovic/nostreq):
 
 ```sh
 nostreq --kinds 1,7 | nosdump -R wss://relay.damus.io > dump.jsonl
@@ -140,14 +187,14 @@ nostreq --kinds 1,7 | nosdump -R wss://relay.damus.io > dump.jsonl
 
 > **Note**
 >
-> If a filter read from stdin and a filter specified by command line options
-> have the same property, **the latter takes precedence of the former**.
+> If a filter read from stdin and a filter specified by command line options have the same property, **the latter takes precedence of the
+> former**.
 
-## Usage
+## Synopsis
 
 ```
-Usage:   nosdump [options...] <relay-URLs...>
-Version: 0.5.0                               
+Usage:   nosdump [options...] <relays...>
+Version: 0.5.0                           
 
 Description:
 
@@ -183,6 +230,8 @@ Input options:
 
 Commands:
 
-  completions  - Generate shell completions.                           
-  upgrade      - Upgrade nosdump executable to latest or given version.
+  completions                              - Generate shell completions.                           
+  upgrade                                  - Upgrade nosdump executable to latest or given version.
+  relay-alias, alias  [alias] [relay-URL]  - Manage relay aliases.                                 
+  relay-set, rset     [name] [relays...]   - Manage relay sets.
 ```

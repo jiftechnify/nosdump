@@ -8,12 +8,8 @@ import { DenoLandProvider } from "@cliffy/command/upgrade/provider/deno-land";
 import { JsrProvider } from "@cliffy/command/upgrade/provider/jsr";
 import { GithubProvider } from "@cliffy/command/upgrade/provider/github";
 
-import type {
-  AllEventsIterOptions,
-  FetchFilter,
-  FetchTimeRangeFilter,
-} from "nostr-fetch";
-import { nip19 } from "nostr-tools";
+import type { AllEventsIterOptions, FetchFilter, FetchTimeRangeFilter } from "nostr-fetch";
+import * as nip19 from "nostr-tools/nip19";
 
 import { getUnixTime, isValid as isDateValid, parseISO } from "date-fns";
 import { Duration } from "@retraigo/duration";
@@ -24,12 +20,16 @@ import { fromError } from "zod-validation-error";
 import { dumpNostrEvents } from "./dump.ts";
 import { Result } from "./types.ts";
 import type { MiscOptions, NosdumpParams } from "./types.ts";
+import { NosdumpConfigRepo } from "./config.ts";
+import { relayAliasCommand } from "./subcommand/relay_alias.ts";
+import { relaySetCommand } from "./subcommand/relay_set.ts";
+import { printErrorHeaderAndMessages } from "./cli_helpers.ts";
 
 export const nosdumpCommand = new Command()
   .name("nosdump")
   .version("0.5.0")
   .description("A tool to dump events stored in Nostr relays")
-  .usage("[options...] <relay-URLs...>")
+  .usage("[options...] <relays...>")
   .command("completions", new CompletionsCommand())
   .command(
     "upgrade",
@@ -44,6 +44,8 @@ export const nosdumpCommand = new Command()
       ],
     }),
   )
+  .command("relay-alias", relayAliasCommand).alias("alias")
+  .command("relay-set", relaySetCommand).alias("rset")
   .reset()
   .type("kind", kindType)
   .type("tag-spec", tagSpecType)
@@ -102,7 +104,7 @@ export const nosdumpCommand = new Command()
       default: false,
     },
   )
-  .arguments("<relay-URLs...>")
+  .arguments("<relays...>")
   .action((options, ...args) => {
     executeNosdump(options, args);
   });
@@ -115,10 +117,10 @@ async function executeNosdump(
   cmdOptions: NosdumpCmdOptions,
   cmdArgs: [string, ...string[]],
 ) {
+  const config = await NosdumpConfigRepo.load();
+
   // read from stdin if it's piped (not terminal)
-  const stdinText = Deno.stdin.isTerminal()
-    ? ""
-    : await streamToText(Deno.stdin.readable);
+  const stdinText = Deno.stdin.isTerminal() ? "" : await streamToText(Deno.stdin.readable);
 
   const currUnixtimeSec = getUnixTime(new Date());
 
@@ -127,12 +129,11 @@ async function executeNosdump(
     cmdArgs,
     stdinText,
     currUnixtimeSec,
+    config,
   );
   if (!parseInputRes.isOk) {
-    console.error(parseInputRes.err.header + ":");
-    for (const msg of parseInputRes.err.msgs) {
-      console.error(msg);
-    }
+    const { header, msgs } = parseInputRes.err;
+    printErrorHeaderAndMessages(header, msgs);
     Deno.exit(1);
   }
   const { miscOptions, ...params } = parseInputRes.val;
@@ -156,6 +157,7 @@ export function parseInput(
   cmdArgs: [string, ...string[]],
   stdinText: string,
   currUnixtimeSec: number,
+  config: NosdumpConfigRepo,
 ): Result<NosdumpParams & { miscOptions: MiscOptions }, ParseInputErrVal> {
   // read stdin and parse as a filter
   const parseStdinRes = parseFilterFromText(stdinText, cmdOptions.stdinReq);
@@ -185,9 +187,18 @@ export function parseInput(
     dryRun: cmdOptions.dryRun,
   });
 
+  // resolve relay specifiers (raw URLs, aliases, or relay set spreads)
+  const resolveRelaysRes = config.resolveRelaySpecifiers(cmdArgs);
+  if (!resolveRelaysRes.isOk) {
+    return Result.err({
+      header: "Failed to resolve relay specifiers",
+      msgs: resolveRelaysRes.err,
+    });
+  }
+
   // filter props specified by CLI option overrides props parsed from stdin.
   return Result.ok({
-    relayUrls: cmdArgs,
+    relayUrls: resolveRelaysRes.val,
     fetchFilter: { ...stdinFilter, ...optFilter },
     fetchTimeRange: { ...stdinTimeRange, ...optTimeRange },
     fetchOptions,
@@ -435,8 +446,7 @@ const tagQuerySchema = z.record(
 
 const regex32BytesHex = /^[a-f0-9]{64}$/;
 
-const stripNostrURIPrefix = (s: string): string =>
-  s.startsWith("nostr:") ? s.replace("nostr:", "") : s;
+const stripNostrURIPrefix = (s: string): string => s.startsWith("nostr:") ? s.replace("nostr:", "") : s;
 
 const toHexEventId = (s: string): Result<string, string> => {
   if (regex32BytesHex.test(s)) {
