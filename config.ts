@@ -82,7 +82,7 @@ export const NosdumpConfigSchema = z.object({
           "relay URL must start with wss:// or ws://",
         )
         .transform((url) => normalizeRelayUrl(url)),
-    ).default({}),
+    ).nullish().transform((v) => v ?? {}),
     sets: z.record(
       z.string()
         .regex(
@@ -98,7 +98,7 @@ export const NosdumpConfigSchema = z.object({
           )
           .transform((url) => normalizeRelayUrl(url)),
       ).transform((urls) => distinct(urls)),
-    ).default({}),
+    ).nullish().transform((v) => v ?? {}),
   }),
 });
 type NosdumpConfig = z.infer<typeof NosdumpConfigSchema>;
@@ -155,7 +155,7 @@ export class NosdumpConfigRepo {
   }
 
   async save(): Promise<void> {
-    const y = yaml.stringify(this.conf);
+    const y = yaml.stringify(this.conf, { useAnchors: false });
     await Deno.mkdir(DEFAULT_CONFIG_DIR, { recursive: true });
     await Deno.writeTextFile(DEFAULT_CONFIG_PATH, y);
   }
