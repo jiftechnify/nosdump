@@ -12,6 +12,7 @@
     "@cliffy/table": "jsr:@cliffy/table@1.0.0-rc.5",
     "@retraigo/duration": "jsr:@retraigo/duration@^4.1.1",
     "@std/assert": "jsr:@std/assert@1.0.4",
+    "@std/collections": "jsr:@std/collections@^1.0.6",
     "@std/fmt": "jsr:@std/fmt@^1.0.2",
     "@std/path": "jsr:@std/path@^1.0.6",
     "@std/streams": "jsr:@std/streams@1.0.4",

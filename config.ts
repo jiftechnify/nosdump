@@ -1,6 +1,7 @@
 import xdg from "xdg";
 import { resolve } from "@std/path";
 import * as toml from "@std/toml";
+import { distinct, union, withoutAll } from "@std/collections";
 import { z, type ZodError } from "zod";
 import { normalizeURL as normalizeRelayUrl } from "nostr-tools/utils";
 import { ValidationError } from "@cliffy/command";
@@ -18,6 +19,15 @@ function assertRelayAliasIsValid(alias: string) {
   }
 }
 
+const reRelaySetName = /^[a-zA-Z0-9_-]+$/;
+function assertRelaySetNameIsValid(name: string) {
+  if (!reRelaySetName.test(name)) {
+    throw new ValidationError(
+      `name of relay set can contain only alphanumeric letters, '-' and '_' (input: ${name}).`,
+    );
+  }
+}
+
 const reRelayUrl = new RegExp("^wss?://");
 function assertRelayUrlIsValid(url: string) {
   if (!URL.canParse(url)) {
@@ -27,6 +37,23 @@ function assertRelayUrlIsValid(url: string) {
     throw new ValidationError(
       `relay URL must start with wss:// or ws:// (input: ${url}).`,
     );
+  }
+}
+function assertRelayUrlsAreValid(urls: string[]) {
+  const errMsgs: string[] = [];
+  for (const url of urls) {
+    try {
+      assertRelayUrlIsValid(url);
+    } catch (err) {
+      if (err instanceof Error) {
+        errMsgs.push(err.message);
+      } else {
+        errMsgs.push(`unknown error while validating: ${url}`);
+      }
+    }
+  }
+  if (errMsgs.length > 0) {
+    throw new ValidationError(errMsgs.join("\n"));
   }
 }
 function relayUrlIsValid(url: string): boolean {
@@ -49,26 +76,45 @@ export const NosdumpConfigSchema = z.object({
         )
         .transform((url) => normalizeRelayUrl(url)),
     ),
+    sets: z.record(
+      z.string()
+        .regex(
+          reRelaySetName,
+          "name of relay set can contain only alphanumeric letters, '-' and '_'",
+        ),
+      z.array(
+        z.string()
+          .url()
+          .regex(
+            reRelayUrl,
+            "relay URL must start with wss:// or ws://",
+          )
+          .transform((url) => normalizeRelayUrl(url)),
+      ).transform((urls) => distinct(urls)),
+    ),
   }),
 });
 type NosdumpConfig = z.infer<typeof NosdumpConfigSchema>;
 const emptyConfig: NosdumpConfig = {
   relay: {
     aliases: {},
+    sets: {},
   },
 };
 
 export class NosdumpConfigRepo {
   private relayAliasesOps: RelayAliasesOps;
+  private relaySetsOps: RelaySetsOps;
 
   private constructor(private conf: NosdumpConfig) {
     this.relayAliasesOps = new RelayAliasesOps(this.conf.relay.aliases);
+    this.relaySetsOps = new RelaySetsOps(this.conf.relay.sets);
   }
 
   static async load(): Promise<NosdumpConfigRepo> {
     try {
       const confFile = await Deno.readTextFile(DEFAULT_CONFIG_PATH);
-      const rawConf = toml.parse(confFile) as NosdumpConfig;
+      const rawConf = toml.parse(confFile);
       const validated = NosdumpConfigSchema.safeParse(rawConf);
       if (!validated.success) {
         const errMsg = formatValidationErrorsOnLoad(
@@ -86,8 +132,19 @@ export class NosdumpConfigRepo {
     }
   }
 
-  static fromConfigObjectForTesting(conf: NosdumpConfig) {
-    return new NosdumpConfigRepo(conf);
+  static fromConfigObjectForTesting(
+    conf: {
+      [K in keyof NosdumpConfig]: {
+        [K2 in keyof NosdumpConfig[K]]?: NosdumpConfig[K][K2];
+      };
+    },
+  ): NosdumpConfigRepo {
+    return new NosdumpConfigRepo({
+      relay: {
+        aliases: conf.relay.aliases ?? {},
+        sets: conf.relay.sets ?? {},
+      },
+    });
   }
 
   async save(): Promise<void> {
@@ -98,6 +155,10 @@ export class NosdumpConfigRepo {
 
   get relayAliases(): RelayAliasesOps {
     return this.relayAliasesOps;
+  }
+
+  get relaySets(): RelaySetsOps {
+    return this.relaySetsOps;
   }
 
   resolveRelaySpecifiers(relaySpecs: string[]): Result<string[], string[]> {
@@ -168,5 +229,99 @@ export class RelayAliasesOps {
     }
     delete this.aliases[alias];
     return true;
+  }
+}
+
+type RelaySets = NosdumpConfig["relay"]["sets"];
+
+export class RelaySetsOps {
+  constructor(private sets: RelaySets) {}
+
+  list(): RelaySets {
+    return Object.fromEntries(
+      Object.entries(this.sets).map(([name, set]) => [name, [...set]]),
+    );
+  }
+
+  get(name: string): string[] | undefined {
+    const set = this.sets[name];
+    return set !== undefined ? [...set] : undefined;
+  }
+
+  has(name: string): boolean {
+    return name in this.sets;
+  }
+
+  addRelayUrlsTo(name: string, relayUrls: string[]): boolean {
+    assertRelaySetNameIsValid(name);
+    assertRelayUrlsAreValid(relayUrls);
+
+    const set = this.get(name) ?? [];
+    const newSet = union(set, relayUrls.map(normalizeRelayUrl));
+
+    if (newSet.length === set.length) {
+      return false;
+    }
+    this.sets[name] = newSet;
+    return true;
+  }
+
+  delete(name: string): boolean {
+    if (!this.has(name)) {
+      return false;
+    }
+    delete this.sets[name];
+    return true;
+  }
+
+  removeRelayUrlsFrom(name: string, relayUrls: string[]): boolean {
+    const set = this.get(name);
+    if (set === undefined) {
+      return false;
+    }
+
+    const newSet = withoutAll(set, relayUrls.map(normalizeRelayUrl));
+    if (newSet.length === set.length) {
+      return false;
+    }
+
+    if (newSet.length === 0) {
+      this.delete(name);
+      return true;
+    }
+
+    this.sets[name] = newSet;
+    return true;
+  }
+
+  copy(srcName: string, dstName: string) {
+    if (srcName === dstName) {
+      throw new ValidationError(
+        "destination relay set must be different from source relay set.",
+      );
+    }
+    assertRelaySetNameIsValid(dstName);
+    const srcSet = this.get(srcName);
+    if (srcSet === undefined) {
+      throw new ValidationError(`relay set "${srcName}" not found.`);
+    }
+
+    this.sets[dstName] = srcSet;
+  }
+
+  rename(oldName: string, newName: string) {
+    if (oldName === newName) {
+      throw new ValidationError(
+        "new relay set name must be different from the old one.",
+      );
+    }
+    assertRelaySetNameIsValid(newName);
+    const oldSet = this.get(oldName);
+    if (oldSet === undefined) {
+      throw new ValidationError(`relay set "${oldName}" not found.`);
+    }
+
+    this.sets[newName] = oldSet;
+    this.delete(oldName);
   }
 }
