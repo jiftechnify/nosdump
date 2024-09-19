@@ -15,7 +15,7 @@ A command line tool which dumps events stored in
 [Install Deno](https://deno.land/manual/getting_started/installation) and run:
 
 ```sh
-deno install --allow-net "jsr:@jiftechnify/nosdump"
+deno install -A "jsr:@jiftechnify/nosdump@0.5.0"
 ```
 
 ### With pre-built binaries (easy)
