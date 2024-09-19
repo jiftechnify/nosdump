@@ -16,7 +16,7 @@
     "@std/fmt": "jsr:@std/fmt@^1.0.2",
     "@std/path": "jsr:@std/path@^1.0.6",
     "@std/streams": "jsr:@std/streams@1.0.4",
-    "@std/toml": "jsr:@std/toml@^1.0.1",
+    "@std/yaml": "jsr:@std/yaml@^1.0.5",
     "date-fns": "npm:date-fns@3.6.0",
     "nostr-fetch": "npm:nostr-fetch@0.15.1",
     "nostr-tools/": "npm:/nostr-tools@2.7.2/",

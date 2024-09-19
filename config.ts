@@ -1,6 +1,6 @@
 import xdg from "xdg";
 import { resolve } from "@std/path";
-import * as toml from "@std/toml";
+import * as yaml from "@std/yaml";
 import { distinct, union, withoutAll } from "@std/collections";
 import { z, type ZodError } from "zod";
 import { normalizeURL as normalizeRelayUrl } from "nostr-tools/utils";
@@ -8,7 +8,7 @@ import { ValidationError } from "@cliffy/command";
 import { Result } from "./types.ts";
 
 const DEFAULT_CONFIG_DIR = resolve(xdg.config(), "nosdump");
-const DEFAULT_CONFIG_PATH = resolve(DEFAULT_CONFIG_DIR, "config.toml");
+const DEFAULT_CONFIG_PATH = resolve(DEFAULT_CONFIG_DIR, "config.yaml");
 
 const reRelayAlias = /^[a-zA-Z0-9_-]+$/;
 function relayAliasIsValid(alias: string): boolean {
@@ -121,7 +121,7 @@ export class NosdumpConfigRepo {
   static async load(): Promise<NosdumpConfigRepo> {
     try {
       const confFile = await Deno.readTextFile(DEFAULT_CONFIG_PATH);
-      const rawConf = toml.parse(confFile);
+      const rawConf = yaml.parse(confFile);
       const validated = NosdumpConfigSchema.safeParse(rawConf);
       if (!validated.success) {
         const errMsg = formatValidationErrorsOnLoadConfig(
@@ -155,9 +155,9 @@ export class NosdumpConfigRepo {
   }
 
   async save(): Promise<void> {
-    const t = toml.stringify(this.conf);
+    const y = yaml.stringify(this.conf);
     await Deno.mkdir(DEFAULT_CONFIG_DIR, { recursive: true });
-    await Deno.writeTextFile(DEFAULT_CONFIG_PATH, t);
+    await Deno.writeTextFile(DEFAULT_CONFIG_PATH, y);
   }
 
   get relayAliases(): RelayAliasesOps {
