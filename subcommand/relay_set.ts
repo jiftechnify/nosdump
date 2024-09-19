@@ -1,10 +1,7 @@
 import { Command } from "@cliffy/command";
 import { colors } from "@cliffy/ansi/colors";
 import { NosdumpConfigRepo } from "../config.ts";
-import {
-  printErrorHeaderAndMessages,
-  promptConfirmation,
-} from "../cli_helpers.ts";
+import { printErrorHeaderAndMessages, promptConfirmation } from "../cli_helpers.ts";
 
 async function listRelaySets(asJson: boolean) {
   const config = await NosdumpConfigRepo.load();
@@ -180,9 +177,7 @@ You group multiple relays into "relay sets":
   $ nosdump relay-set add set1 wss://relay1-a.com wss://relay1-b.com
   $ nosdump relay-set add set2 wss://relay2-a.com wss://relay2-b.com
 
-then, with the ${
-  colors.bold.green("...<relay-set>")
-} syntax, you specify all the relays in the relay set as dump targets:
+then, with the ${colors.bold.green("...<relay-set>")} syntax, you specify all the relays in the relay set as dump targets:
   $ nosdump --kinds 1 ...set1 ...set2
 
 Shorthands:

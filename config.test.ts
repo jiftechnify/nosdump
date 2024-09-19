@@ -1,16 +1,6 @@
-import {
-  assert,
-  assertArrayIncludes,
-  assertEquals,
-  assertThrows,
-} from "@std/assert";
+import { assert, assertArrayIncludes, assertEquals, assertThrows } from "@std/assert";
 
-import {
-  NosdumpConfigRepo,
-  NosdumpConfigSchema,
-  RelayAliasesOps,
-  RelaySetsOps,
-} from "./config.ts";
+import { NosdumpConfigRepo, NosdumpConfigSchema, RelayAliasesOps, RelaySetsOps } from "./config.ts";
 import { ZodError } from "zod";
 
 Deno.test("NosdumpConfigRepo", async (t) => {

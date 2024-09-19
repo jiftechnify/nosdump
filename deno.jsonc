@@ -24,5 +24,8 @@
     "xdg": "https://deno.land/x/xdg_portable@v10.6.0/src/mod.deno.ts",
     "zod": "npm:zod@3.23.8",
     "zod-validation-error": "npm:zod-validation-error@3.3.1"
+  },
+  "fmt": {
+    "lineWidth": 140
   }
 }
