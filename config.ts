@@ -11,8 +11,12 @@ const DEFAULT_CONFIG_DIR = resolve(xdg.config(), "nosdump");
 const DEFAULT_CONFIG_PATH = resolve(DEFAULT_CONFIG_DIR, "config.toml");
 
 const reRelayAlias = /^[a-zA-Z0-9_-]+$/;
+function relayAliasIsValid(alias: string): boolean {
+  return reRelayAlias.test(alias);
+}
+
 function assertRelayAliasIsValid(alias: string) {
-  if (!reRelayAlias.test(alias)) {
+  if (!relayAliasIsValid(alias)) {
     throw new ValidationError(
       `relay alias can contain only alphanumeric letters, '-' and '_' (input: ${alias}).`,
     );
@@ -20,8 +24,11 @@ function assertRelayAliasIsValid(alias: string) {
 }
 
 const reRelaySetName = /^[a-zA-Z0-9_-]+$/;
+function relaySetNameIsValid(name: string): boolean {
+  return reRelaySetName.test(name);
+}
 function assertRelaySetNameIsValid(name: string) {
-  if (!reRelaySetName.test(name)) {
+  if (!relaySetNameIsValid(name)) {
     throw new ValidationError(
       `name of relay set can contain only alphanumeric letters, '-' and '_' (input: ${name}).`,
     );
@@ -29,6 +36,9 @@ function assertRelaySetNameIsValid(name: string) {
 }
 
 const reRelayUrl = new RegExp("^wss?://");
+function relayUrlIsValid(url: string): boolean {
+  return URL.canParse(url) && reRelayUrl.test(url);
+}
 function assertRelayUrlIsValid(url: string) {
   if (!URL.canParse(url)) {
     throw new ValidationError(`invalid URL: ${url}`);
@@ -55,9 +65,6 @@ function assertRelayUrlsAreValid(urls: string[]) {
   if (errMsgs.length > 0) {
     throw new ValidationError(errMsgs.join("\n"));
   }
-}
-function relayUrlIsValid(url: string): boolean {
-  return URL.canParse(url) && reRelayUrl.test(url);
 }
 
 export const NosdumpConfigSchema = z.object({
@@ -117,7 +124,7 @@ export class NosdumpConfigRepo {
       const rawConf = toml.parse(confFile);
       const validated = NosdumpConfigSchema.safeParse(rawConf);
       if (!validated.success) {
-        const errMsg = formatValidationErrorsOnLoad(
+        const errMsg = formatValidationErrorsOnLoadConfig(
           validated.error,
           DEFAULT_CONFIG_PATH,
         );
@@ -162,35 +169,68 @@ export class NosdumpConfigRepo {
   }
 
   resolveRelaySpecifiers(relaySpecs: string[]): Result<string[], string[]> {
-    const resolved = new Set<string>();
+    const resolved: string[] = [];
     const errors: string[] = [];
 
     for (const rspec of relaySpecs) {
       // resolve valid relay URL as is
       if (relayUrlIsValid(rspec)) {
-        resolved.add(normalizeRelayUrl(rspec));
+        resolved.push(normalizeRelayUrl(rspec));
         continue;
       }
 
-      // resolve relay alias as referent
-      const aliased = this.relayAliases.get(rspec);
-      if (aliased !== undefined) {
-        resolved.add(aliased);
+      // resolve "...<relay-set>" to all relays in the set
+      const setName = parseRelaySetSpread(rspec);
+      if (setName !== undefined) {
+        const relays = this.relaySetsOps.listRelaysOf(setName);
+
+        if (relays === undefined) {
+          errors.push(`relay set "${setName}" not found.`);
+          continue;
+        }
+
+        resolved.push(...relays);
+        continue;
+      }
+
+      // resolve relay alias to referent
+      if (relayAliasIsValid(rspec)) {
+        const aliased = this.relayAliases.get(rspec);
+        if (aliased === undefined) {
+          errors.push(`relay alias "${rspec}" not found.`);
+          continue;
+        }
+
+        resolved.push(aliased);
         continue;
       }
 
       // all attempts failed
-      errors.push(`"${rspec}" is not a valid relay URL or a relay alias.`);
+      errors.push(
+        `"${rspec}" is not a valid relay URL, a relay set spread (...<relay-set>), or a relay alias.`,
+      );
     }
 
     if (errors.length > 0) {
       return Result.err(errors);
     }
-    return Result.ok([...resolved]);
+    return Result.ok(distinct(resolved));
   }
 }
 
-function formatValidationErrorsOnLoad(err: ZodError, confPath: string): string {
+// parse the "...<relay-set>" syntax in relay specifiers
+function parseRelaySetSpread(s: string): string | undefined {
+  if (s.startsWith("...")) {
+    const setName = s.slice(3);
+    return relaySetNameIsValid(setName) ? setName : undefined;
+  }
+  return undefined;
+}
+
+function formatValidationErrorsOnLoadConfig(
+  err: ZodError,
+  confPath: string,
+): string {
   const lines = [
     "Config file validation error!",
     `Please check and fix the config at: ${confPath}`,
