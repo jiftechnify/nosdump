@@ -95,7 +95,7 @@ Shorthands:
   * nosdump alias <alias>             === nosdump alias get <alias>
   * nosdump alias <alias> <relay-URL> === nosdump alias set <alias> <relay-URL>`;
 
-export const aliasCommand = new Command()
+export const relayAliasCommand = new Command()
   .command("list", aliasListCmd)
   .command("get", aliasGetCmd)
   .command("set", aliasSetCmd)

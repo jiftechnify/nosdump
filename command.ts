@@ -25,7 +25,7 @@ import { dumpNostrEvents } from "./dump.ts";
 import { Result } from "./types.ts";
 import type { MiscOptions, NosdumpParams } from "./types.ts";
 import { NosdumpConfigRepo } from "./config.ts";
-import { aliasCommand } from "./subcommand/alias.ts";
+import { relayAliasCommand } from "./subcommand/relay_alias.ts";
 import { relaySetCommand } from "./subcommand/relay_set.ts";
 
 export const nosdumpCommand = new Command()
@@ -47,7 +47,7 @@ export const nosdumpCommand = new Command()
       ],
     }),
   )
-  .command("alias", aliasCommand)
+  .command("relay-alias", relayAliasCommand).alias("alias")
   .command("relay-set", relaySetCommand).alias("rset")
   .reset()
   .type("kind", kindType)
