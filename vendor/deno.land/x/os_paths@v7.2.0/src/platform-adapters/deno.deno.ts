@@ -2,7 +2,7 @@
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import * as path from 'https://deno.land/std@0.134.0/path/mod.ts';
+import * as path from 'https://deno.land/std@0.224.0/path/mod.ts';
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
