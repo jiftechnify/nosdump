@@ -32,7 +32,7 @@ jobs:
         run: deno task static-checks
 
       - name: Run tests
-        run: deno test --no-lock
+        run: deno task test
 
       - name: Publish to JSR
         run: deno publish

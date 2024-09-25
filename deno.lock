@@ -11,11 +11,14 @@
       "jsr:@cliffy/table@1.0.0-rc.5": "jsr:@cliffy/table@1.0.0-rc.5",
       "jsr:@retraigo/duration@4.1.1": "jsr:@retraigo/duration@4.1.1",
       "jsr:@std/assert@1.0.0-rc.2": "jsr:@std/assert@1.0.0-rc.2",
+      "jsr:@std/assert@1.0.4": "jsr:@std/assert@1.0.4",
       "jsr:@std/bytes@^1.0.2": "jsr:@std/bytes@1.0.2",
       "jsr:@std/cli@1.0.0-rc.2": "jsr:@std/cli@1.0.0-rc.2",
       "jsr:@std/collections@1.0.6": "jsr:@std/collections@1.0.6",
       "jsr:@std/encoding@1.0.0-rc.2": "jsr:@std/encoding@1.0.0-rc.2",
       "jsr:@std/fmt@~0.225.4": "jsr:@std/fmt@0.225.6",
+      "jsr:@std/internal@^1.0.3": "jsr:@std/internal@1.0.3",
+      "jsr:@std/io@~0.224.2": "jsr:@std/io@0.224.7",
       "jsr:@std/path@1.0.0-rc.2": "jsr:@std/path@1.0.0-rc.2",
       "jsr:@std/path@1.0.6": "jsr:@std/path@1.0.6",
       "jsr:@std/streams@1.0.4": "jsr:@std/streams@1.0.4",
@@ -34,7 +37,8 @@
         "dependencies": [
           "jsr:@cliffy/internal@1.0.0-rc.5",
           "jsr:@std/encoding@1.0.0-rc.2",
-          "jsr:@std/fmt@~0.225.4"
+          "jsr:@std/fmt@~0.225.4",
+          "jsr:@std/io@~0.224.2"
         ]
       },
       "@cliffy/command@1.0.0-rc.5": {
@@ -67,6 +71,7 @@
           "jsr:@cliffy/keycode@1.0.0-rc.5",
           "jsr:@std/assert@1.0.0-rc.2",
           "jsr:@std/fmt@~0.225.4",
+          "jsr:@std/io@~0.224.2",
           "jsr:@std/path@1.0.0-rc.2",
           "jsr:@std/text@1.0.0-rc.1"
         ]
@@ -84,6 +89,12 @@
       "@std/assert@1.0.0-rc.2": {
         "integrity": "0484eab1d76b55fca1c3beaff485a274e67dd3b9f065edcbe70030dfc0b964d3"
       },
+      "@std/assert@1.0.4": {
+        "integrity": "d4c767ea578e5bc09c15b6e503376003e5b2d1f4c0cdf08524a92101ff4d7b96",
+        "dependencies": [
+          "jsr:@std/internal@^1.0.3"
+        ]
+      },
       "@std/bytes@1.0.2": {
         "integrity": "fbdee322bbd8c599a6af186a1603b3355e59a5fb1baa139f8f4c3c9a1b3e3d57"
       },
@@ -98,6 +109,12 @@
       },
       "@std/fmt@0.225.6": {
         "integrity": "aba6aea27f66813cecfd9484e074a9e9845782ab0685c030e453a8a70b37afc8"
+      },
+      "@std/internal@1.0.3": {
+        "integrity": "208e9b94a3d5649bd880e9ca38b885ab7651ab5b5303a56ed25de4755fb7b11e"
+      },
+      "@std/io@0.224.7": {
+        "integrity": "a70848793c44a7c100926571a8c9be68ba85487bfcd4d0540d86deabe1123dc9"
       },
       "@std/path@1.0.0-rc.2": {
         "integrity": "39f20d37a44d1867abac8d91c169359ea6e942237a45a99ee1e091b32b921c7d"

@@ -5,6 +5,7 @@
   "tasks": {
     "static-checks": "deno check --no-lock mod.ts & deno fmt --check & deno lint",
     "publish-check": "deno publish --dry-run",
+    "test": "deno test -A --no-lock",
     "tidy": "rm -f deno.lock && deno cache \"*.ts\""
   },
   "imports": {
