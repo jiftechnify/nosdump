@@ -19,6 +19,11 @@ deno install -A "jsr:@jiftechnify/nosdump@0.7.0"
 > [!IMPORTANT]
 > Don't forget the `-A` flag or you may have a lot of troubles while running the installed command!
 
+> [!NOTE]
+> If you use runtime version managers like asdf to manage Deno version, you may want to manually set the installation root directory with
+> `--root` option of `deno install` or `$DENO_INSTALL_ROOT` environment variable to fix the location of the executable. See
+> [the reference](https://docs.deno.com/runtime/reference/cli/script_installer/) for more details.
+
 ### With Pre-built Binaries (easy)
 
 Download pre-built binaries from the [releases](https://github.com/jiftechnify/nosdump/releases) page.
