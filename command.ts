@@ -4,9 +4,7 @@ import { Command, ValidationError } from "@cliffy/command";
 import type { ArgumentValue } from "@cliffy/command";
 import { CompletionsCommand } from "@cliffy/command/completions";
 import { UpgradeCommand } from "@cliffy/command/upgrade";
-import { DenoLandProvider } from "@cliffy/command/upgrade/provider/deno-land";
 import { JsrProvider } from "@cliffy/command/upgrade/provider/jsr";
-import { GithubProvider } from "@cliffy/command/upgrade/provider/github";
 
 import type { AllEventsIterOptions, FetchFilter, FetchTimeRangeFilter } from "nostr-fetch";
 import * as nip19 from "nostr-tools/nip19";
@@ -35,12 +33,10 @@ export const nosdumpCommand = new Command()
     "upgrade",
     new UpgradeCommand({
       provider: [
-        new DenoLandProvider({ name: "nosdump" }),
         new JsrProvider({
           scope: "jiftechnify",
           package: "@jiftechnify/nosdump",
         }),
-        new GithubProvider({ repository: "jiftechnify/nosdump" }),
       ],
     }),
   )
