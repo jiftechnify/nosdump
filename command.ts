@@ -38,6 +38,7 @@ export const nosdumpCommand = new Command()
           package: "@jiftechnify/nosdump",
         }),
       ],
+      args: ["--allow-all"], // grant all permissions while upgrading
     }),
   )
   .command("relay-alias", relayAliasCommand).alias("alias")
