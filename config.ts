@@ -1,4 +1,4 @@
-import xdg from "xdg-portable";
+import makeEnvPaths from "env-paths";
 import { resolve } from "@std/path";
 import * as yaml from "@std/yaml";
 import { distinct, union, withoutAll } from "@std/collections";
@@ -7,7 +7,8 @@ import { normalizeURL as normalizeRelayUrl } from "nostr-tools/utils";
 import { ValidationError } from "@cliffy/command";
 import { Result } from "./types.ts";
 
-const DEFAULT_CONFIG_DIR = resolve(xdg.config(), "nosdump");
+const ENV_PATHS = makeEnvPaths("nosdump", { suffix: "" });
+const DEFAULT_CONFIG_DIR = ENV_PATHS.config;
 const DEFAULT_CONFIG_PATH = resolve(DEFAULT_CONFIG_DIR, "config.yaml");
 
 const reRelayAlias = /^[a-zA-Z0-9_-]+$/;
