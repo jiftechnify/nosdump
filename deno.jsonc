@@ -1,6 +1,6 @@
 {
   "name": "@jiftechnify/nosdump",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "exports": "./mod.ts",
   "tasks": {
     "static-checks": "deno check --no-lock mod.ts & deno fmt --check & deno lint",

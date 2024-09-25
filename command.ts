@@ -25,7 +25,7 @@ import { Result } from "./types.ts";
 
 export const nosdumpCommand = new Command()
   .name("nosdump")
-  .version("0.7.0")
+  .version("0.7.1")
   .description("A tool to dump events stored in Nostr relays")
   .usage("[options...] <relays...>")
   .command("completions", new CompletionsCommand())
