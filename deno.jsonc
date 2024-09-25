@@ -26,6 +26,11 @@
     "zod": "npm:zod@3.23.8",
     "zod-validation-error": "npm:zod-validation-error@3.3.1"
   },
+  "publish": {
+    "exclude": [
+      ".github"
+    ]
+  },
   "fmt": {
     "lineWidth": 140,
     "exclude": [
