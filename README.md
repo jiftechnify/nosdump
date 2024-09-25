@@ -16,6 +16,9 @@ A command line tool which dumps events stored in [Nostr](https://github.com/nost
 deno install -A "jsr:@jiftechnify/nosdump@0.7.0"
 ```
 
+> [!IMPORTANT]
+> Don't forget the `-A` flag or you may have a lot of troubles while running the installed command!
+
 ### With Pre-built Binaries (easy)
 
 Download pre-built binaries from the [releases](https://github.com/jiftechnify/nosdump/releases) page.
@@ -102,8 +105,7 @@ Of course, you can use raw relay URLs, relay aliases and relay sets together to 
 nosdump --kinds 1 --since 10m wss://nrelay.c-stellar.net welcome ...mega-relays
 ```
 
-> **Note**
->
+> [!NOTE]
 > Configured relay aliases and relay sets are saved in a config file on your local file system. The location of the config file is
 > `${CONFIG_DIR}/nosdump/config.yaml`, where `${CONFIG_DIR}` is
 > [the standard directory for user-specific configs](https://github.com/sindresorhus/env-paths?tab=readme-ov-file#pathsconfig) on the
@@ -185,8 +187,7 @@ This feature makes nosdump interoperable with [nostreq](https://github.com/blake
 nostreq --kinds 1,7 | nosdump -R wss://relay.damus.io > dump.jsonl
 ```
 
-> **Note**
->
+> [!NOTE]
 > If a filter read from stdin and a filter specified by command line options have the same property, **the latter takes precedence of the
 > former**.
 
