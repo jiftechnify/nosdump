@@ -106,7 +106,7 @@ nosdump --kinds 1 --since 10m wss://nrelay.c-stellar.net welcome ...mega-relays
 >
 > Configured relay aliases and relay sets are saved in a config file on your local file system. The location of the config file is
 > `${CONFIG_DIR}/nosdump/config.yaml`, where `${CONFIG_DIR}` is
-> [the standard directory for user-specific configs](https://github.com/rivy/js.xdg-portable?tab=readme-ov-file#xdgconfig-string) on the
+> [the standard directory for user-specific configs](https://github.com/sindresorhus/env-paths?tab=readme-ov-file#pathsconfig) on the
 > platform you use.
 
 ### Various Input Formats
