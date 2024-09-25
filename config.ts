@@ -1,10 +1,12 @@
-import makeEnvPaths from "env-paths";
+import { distinct, union, withoutAll } from "@std/collections";
 import { resolve } from "@std/path";
 import * as yaml from "@std/yaml";
-import { distinct, union, withoutAll } from "@std/collections";
-import { z, type ZodError } from "zod";
-import { normalizeURL as normalizeRelayUrl } from "nostr-tools/utils";
+
 import { ValidationError } from "@cliffy/command";
+import makeEnvPaths from "env-paths";
+import { normalizeURL as normalizeRelayUrl } from "nostr-tools/utils";
+import { z, type ZodError } from "zod";
+
 import { Result } from "./types.ts";
 
 const ENV_PATHS = makeEnvPaths("nosdump", { suffix: "" });

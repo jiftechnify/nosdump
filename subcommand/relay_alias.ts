@@ -1,8 +1,8 @@
 import { Command } from "@cliffy/command";
 import { Table } from "@cliffy/table";
 
-import { NosdumpConfigRepo } from "../config.ts";
 import { promptConfirmation } from "../cli_helpers.ts";
+import { NosdumpConfigRepo } from "../config.ts";
 
 async function listAliases(asJson: boolean) {
   const conf = await NosdumpConfigRepo.load();

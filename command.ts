@@ -1,7 +1,7 @@
 import { toText as streamToText } from "@std/streams";
 
-import { Command, ValidationError } from "@cliffy/command";
 import type { ArgumentValue } from "@cliffy/command";
+import { Command, ValidationError } from "@cliffy/command";
 import { CompletionsCommand } from "@cliffy/command/completions";
 import { UpgradeCommand } from "@cliffy/command/upgrade";
 import { JsrProvider } from "@cliffy/command/upgrade/provider/jsr";
@@ -9,19 +9,19 @@ import { JsrProvider } from "@cliffy/command/upgrade/provider/jsr";
 import type { AllEventsIterOptions, FetchFilter, FetchTimeRangeFilter } from "nostr-fetch";
 import * as nip19 from "nostr-tools/nip19";
 
-import { getUnixTime, isValid as isDateValid, parseISO } from "date-fns";
 import { Duration } from "@retraigo/duration";
+import { getUnixTime, isValid as isDateValid, parseISO } from "date-fns";
 
 import { z, ZodError } from "zod";
 import { fromError } from "zod-validation-error";
 
-import { dumpNostrEvents } from "./dump.ts";
-import { Result } from "./types.ts";
-import type { MiscOptions, NosdumpParams } from "./types.ts";
+import { printErrorHeaderAndMessages } from "./cli_helpers.ts";
 import { NosdumpConfigRepo } from "./config.ts";
+import { dumpNostrEvents } from "./dump.ts";
 import { relayAliasCommand } from "./subcommand/relay_alias.ts";
 import { relaySetCommand } from "./subcommand/relay_set.ts";
-import { printErrorHeaderAndMessages } from "./cli_helpers.ts";
+import type { MiscOptions, NosdumpParams } from "./types.ts";
+import { Result } from "./types.ts";
 
 export const nosdumpCommand = new Command()
   .name("nosdump")

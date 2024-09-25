@@ -1,7 +1,8 @@
-import { Command } from "@cliffy/command";
 import { colors } from "@cliffy/ansi/colors";
-import { NosdumpConfigRepo } from "../config.ts";
+import { Command } from "@cliffy/command";
+
 import { printErrorHeaderAndMessages, promptConfirmation } from "../cli_helpers.ts";
+import { NosdumpConfigRepo } from "../config.ts";
 
 async function listRelaySets(asJson: boolean) {
   const config = await NosdumpConfigRepo.load();
