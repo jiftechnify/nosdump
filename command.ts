@@ -256,7 +256,7 @@ const parseFilterFromText = (
     if (err instanceof Error) {
       return Result.err(err);
     }
-    return Result.err(Error(err));
+    return Result.err(new Error("failed to parse a Nostr filter from the input", { cause: err }));
   }
 };
 
