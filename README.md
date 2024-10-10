@@ -13,7 +13,7 @@ A command line tool which dumps events stored in [Nostr](https://github.com/nost
 [Install Deno](https://deno.land/manual/getting_started/installation) and run:
 
 ```sh
-deno install -A "jsr:@jiftechnify/nosdump@0.7.1"
+deno install -g -A "jsr:@jiftechnify/nosdump@0.7.1"
 ```
 
 > [!IMPORTANT]
