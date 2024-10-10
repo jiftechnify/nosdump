@@ -25,9 +25,9 @@ jobs:
           token: ${{ steps.create_token.outputs.token }}
 
       - name: Setup Deno
-        uses: denoland/setup-deno@v1.5.1
+        uses: denoland/setup-deno@v2.0.0
         with:
-          deno-version: "~1.46"
+          deno-version: "~2.0"
 
       - name: Update dependencies with udd
         id: run-deno-udd
