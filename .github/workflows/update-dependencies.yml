@@ -13,16 +13,16 @@ jobs:
 
     steps:
       - name: Generate GitHub App token
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
-        id: create_token
+        uses: actions/create-github-app-token@5d869da34e18e7287c1daad50e0b8ea0f506ce69 # v1.11.0
+        id: create-token
         with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.PRIVATE_KEY }}
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
 
       - name: Setup repo
         uses: actions/checkout@v4
         with:
-          token: ${{ steps.create_token.outputs.token }}
+          token: ${{ steps.create-token.outputs.token }}
 
       - name: Setup Deno
         uses: denoland/setup-deno@v2.0.0
@@ -57,4 +57,4 @@ jobs:
           branch: udd-update
           author: GitHub <noreply@github.com>
           delete-branch: true
-          token: ${{ steps.create_token.outputs.token }}
+          token: ${{ steps.create-token.outputs.token }}
