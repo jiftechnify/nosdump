@@ -1,4 +1,4 @@
-name: Deno Update 
+name: Deno Update
 
 on:
   schedule:
@@ -33,4 +33,3 @@ jobs:
         uses: hasundue/molt-action@v1
         with:
           token: ${{ steps.create-token.outputs.token }}
-

@@ -1,6 +1,6 @@
 name: Release on tag push
 
-on: 
+on:
   push:
     tags:
       - "*"
@@ -50,9 +50,8 @@ jobs:
             deno compile --target $ARCH -o nosdump.exe -A mod.ts
             zip -r "nosdump-${ARCH}" nosdump.exe
           done
-      
+
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: nosdump-*.zip
-
