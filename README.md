@@ -132,7 +132,7 @@ nosdump -i nevent1qqsvsf8prpx57dnqp97c9xtr9trj8adl46s7k45cvl6fyne0quf6xggq2q33g 
 nosdump -i nostr:note1eqjwzxzdfumxqztas2vkx2k8y06mlt4padtfsel5jf8j7pcn5vsssd2g8m wss://relay.damus.io
 nosdump -i nostr:nevent1qqsvsf8prpx57dnqp97c9xtr9trj8adl46s7k45cvl6fyne0quf6xggq2q33g wss://relay.damus.io
 
-# Even in e-tag qeury!
+# Even in e-tag query!
 nosdump -e nostr:note1eqjwzxzdfumxqztas2vkx2k8y06mlt4padtfsel5jf8j7pcn5vsssd2g8m wss://relay.damus.io
 ```
 
