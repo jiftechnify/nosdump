@@ -22,7 +22,7 @@
     "@std/yaml": "jsr:@std/yaml@1.0.5",
     "date-fns": "npm:date-fns@4.1.0",
     "env-paths": "npm:env-paths@3.0.0",
-    "nostr-fetch": "npm:nostr-fetch@0.15.1",
+    "nostr-fetch": "npm:nostr-fetch@0.17.0",
     "nostr-tools/": "npm:/nostr-tools@2.10.4/",
     "zod": "npm:zod@3.23.8",
     "zod-validation-error": "npm:zod-validation-error@3.3.1"

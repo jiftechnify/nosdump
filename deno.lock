@@ -26,7 +26,7 @@
       "jsr:@std/yaml@1.0.5": "jsr:@std/yaml@1.0.5",
       "npm:date-fns@4.1.0": "npm:date-fns@4.1.0",
       "npm:env-paths@3.0.0": "npm:env-paths@3.0.0",
-      "npm:nostr-fetch@0.15.1": "npm:nostr-fetch@0.15.1",
+      "npm:nostr-fetch@0.17.0": "npm:nostr-fetch@0.17.0",
       "npm:zod@3.23.8": "npm:zod@3.23.8"
     },
     "jsr": {
@@ -130,25 +130,25 @@
       }
     },
     "npm": {
-      "@noble/curves@1.2.0": {
-        "integrity": "sha512-oYclrNgRaM9SsBUBVbb8M6DTV7ZHRTKugureoYEncY5c65HOmRzvSiTE3y5CYaPYJA/GVkrhXEoF0M3Ya9PMnw==",
+      "@noble/curves@1.7.0": {
+        "integrity": "sha512-UTMhXK9SeDhFJVrHeUJ5uZlI6ajXg10O6Ddocf9S6GjbSBVZsJo88HzKwXznNfGpMTRDyJkqMjNDPYgf0qFWnw==",
         "dependencies": {
-          "@noble/hashes": "@noble/hashes@1.3.2"
+          "@noble/hashes": "@noble/hashes@1.6.0"
         }
       },
-      "@noble/hashes@1.3.1": {
-        "integrity": "sha512-EbqwksQwz9xDRGfDST86whPBgM65E0OH/pCgqW0GBVzO22bNE+NuIbeTb714+IfSjU3aRk47EUvXIb5bTsenKA==",
+      "@noble/hashes@1.6.0": {
+        "integrity": "sha512-YUULf0Uk4/mAA89w+k3+yUYh6NrEvxZa5T6SY3wlMvE2chHkxFUUIDI8/XW1QSC357iA5pSnqt7XEhvFOqmDyQ==",
         "dependencies": {}
       },
-      "@noble/hashes@1.3.2": {
-        "integrity": "sha512-MVC8EAQp7MvEcm30KWENFjgR+Mkmf+D189XJTkFIlwohU5hcBbn1ZkKq7KVTi2Hme3PMGF390DaL52beVrIihQ==",
+      "@noble/hashes@1.6.1": {
+        "integrity": "sha512-pq5D8h10hHBjyqX+cfBm0i8JUXJ0UhczFc4r74zbuT9XgewFo2E3J1cOaGtdZynILNmQ685YWGzGE1Zv6io50w==",
         "dependencies": {}
       },
-      "@nostr-fetch/kernel@0.15.1": {
-        "integrity": "sha512-+KX+n3v9ha2ki5BGL12isw+BrlK36aANkDD98SQMzt+5VFRCnfkFiJSkx+kjAKm0BXdA3YCTRhrqVOYEDuvohQ==",
+      "@nostr-fetch/kernel@0.17.0": {
+        "integrity": "sha512-r0EdueKQlMRqCqOIPUS53UrVl8AbWWnV03PNQn78MLvwCPqq9c+IPY93dh9nL3GWZOB0oTRkBJ3/sgIzDL3iOw==",
         "dependencies": {
-          "@noble/curves": "@noble/curves@1.2.0",
-          "@noble/hashes": "@noble/hashes@1.3.1"
+          "@noble/curves": "@noble/curves@1.7.0",
+          "@noble/hashes": "@noble/hashes@1.6.1"
         }
       },
       "date-fns@4.1.0": {
@@ -159,10 +159,10 @@
         "integrity": "sha512-dtJUTepzMW3Lm/NPxRf3wP4642UWhjL2sQxc+ym2YMj1m/H2zDNQOlezafzkHwn6sMstjHTwG6iQQsctDW/b1A==",
         "dependencies": {}
       },
-      "nostr-fetch@0.15.1": {
-        "integrity": "sha512-SyXdAsUM3qnuoz35tyX3mwxY1BU5sBsr1JCIMXiV5Ej7uSkyBjnBkzsXH5CYq0p42hI9z6xwfuFqnkvBsaTmJA==",
+      "nostr-fetch@0.17.0": {
+        "integrity": "sha512-Q0k12uTB5Cj4zTe5ZNsyr7dBMxZrncU+7UNH8G9Z6zyEERVoPT5Z49vNCVDw8yvFwzslKiWeoT143NF/9FlKbQ==",
         "dependencies": {
-          "@nostr-fetch/kernel": "@nostr-fetch/kernel@0.15.1"
+          "@nostr-fetch/kernel": "@nostr-fetch/kernel@0.17.0"
         }
       },
       "zod@3.23.8": {
@@ -186,7 +186,7 @@
       "jsr:@std/yaml@1.0.5",
       "npm:date-fns@4.1.0",
       "npm:env-paths@3.0.0",
-      "npm:nostr-fetch@0.15.1",
+      "npm:nostr-fetch@0.17.0",
       "npm:zod@3.23.8"
     ]
   }
