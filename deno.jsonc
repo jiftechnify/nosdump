@@ -25,7 +25,7 @@
     "nostr-fetch": "npm:nostr-fetch@0.17.0",
     "nostr-tools/": "npm:/nostr-tools@2.10.4/",
     "zod": "npm:zod@3.24.1",
-    "zod-validation-error": "npm:zod-validation-error@3.3.1"
+    "zod-validation-error": "npm:zod-validation-error@3.4.0"
   },
   "publish": {
     "exclude": [
