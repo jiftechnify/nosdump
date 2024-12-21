@@ -18,7 +18,7 @@
     "@std/collections": "jsr:@std/collections@1.0.9",
     "@std/fmt": "jsr:@std/fmt@1.0.3",
     "@std/path": "jsr:@std/path@1.0.8",
-    "@std/streams": "jsr:@std/streams@1.0.4",
+    "@std/streams": "jsr:@std/streams@1.0.8",
     "@std/yaml": "jsr:@std/yaml@1.0.5",
     "date-fns": "npm:date-fns@3.6.0",
     "env-paths": "npm:env-paths@3.0.0",

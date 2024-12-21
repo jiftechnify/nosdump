@@ -12,7 +12,8 @@
       "jsr:@retraigo/duration@4.1.1": "jsr:@retraigo/duration@4.1.1",
       "jsr:@std/assert@1.0.10": "jsr:@std/assert@1.0.10",
       "jsr:@std/assert@~1.0.6": "jsr:@std/assert@1.0.10",
-      "jsr:@std/bytes@^1.0.2": "jsr:@std/bytes@1.0.2",
+      "jsr:@std/bytes@^1.0.2": "jsr:@std/bytes@1.0.4",
+      "jsr:@std/bytes@^1.0.3": "jsr:@std/bytes@1.0.4",
       "jsr:@std/collections@1.0.9": "jsr:@std/collections@1.0.9",
       "jsr:@std/encoding@~1.0.5": "jsr:@std/encoding@1.0.6",
       "jsr:@std/fmt@~1.0.2": "jsr:@std/fmt@1.0.3",
@@ -20,7 +21,7 @@
       "jsr:@std/io@~0.224.9": "jsr:@std/io@0.224.9",
       "jsr:@std/path@1.0.8": "jsr:@std/path@1.0.8",
       "jsr:@std/path@~1.0.6": "jsr:@std/path@1.0.8",
-      "jsr:@std/streams@1.0.4": "jsr:@std/streams@1.0.4",
+      "jsr:@std/streams@1.0.8": "jsr:@std/streams@1.0.8",
       "jsr:@std/text@~1.0.7": "jsr:@std/text@1.0.9",
       "jsr:@std/yaml@1.0.5": "jsr:@std/yaml@1.0.5",
       "npm:date-fns@3.6.0": "npm:date-fns@3.6.0",
@@ -91,9 +92,6 @@
           "jsr:@std/internal@^1.0.5"
         ]
       },
-      "@std/bytes@1.0.2": {
-        "integrity": "fbdee322bbd8c599a6af186a1603b3355e59a5fb1baa139f8f4c3c9a1b3e3d57"
-      },
       "@std/bytes@1.0.4": {
         "integrity": "11a0debe522707c95c7b7ef89b478c13fb1583a7cfb9a85674cd2cc2e3a28abc"
       },
@@ -118,10 +116,10 @@
       "@std/path@1.0.8": {
         "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
       },
-      "@std/streams@1.0.4": {
-        "integrity": "a1a5b01c74ca1d2dcaacfe1d4bbb91392e765946d82a3471bd95539adc6da83a",
+      "@std/streams@1.0.8": {
+        "integrity": "b41332d93d2cf6a82fe4ac2153b930adf1a859392931e2a19d9fabfb6f154fb3",
         "dependencies": [
-          "jsr:@std/bytes@^1.0.2"
+          "jsr:@std/bytes@^1.0.3"
         ]
       },
       "@std/text@1.0.9": {
@@ -184,7 +182,7 @@
       "jsr:@std/assert@1.0.10",
       "jsr:@std/collections@1.0.9",
       "jsr:@std/path@1.0.8",
-      "jsr:@std/streams@1.0.4",
+      "jsr:@std/streams@1.0.8",
       "jsr:@std/yaml@1.0.5",
       "npm:date-fns@3.6.0",
       "npm:env-paths@3.0.0",
