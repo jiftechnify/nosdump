@@ -13,7 +13,7 @@
       "jsr:@std/assert@1.0.16": "jsr:@std/assert@1.0.16",
       "jsr:@std/assert@~1.0.6": "jsr:@std/assert@1.0.16",
       "jsr:@std/bytes@^1.0.2": "jsr:@std/bytes@1.0.2",
-      "jsr:@std/collections@1.0.6": "jsr:@std/collections@1.0.6",
+      "jsr:@std/collections@1.1.3": "jsr:@std/collections@1.1.3",
       "jsr:@std/encoding@~1.0.5": "jsr:@std/encoding@1.0.10",
       "jsr:@std/fmt@~1.0.2": "jsr:@std/fmt@1.0.8",
       "jsr:@std/internal@^1.0.12": "jsr:@std/internal@1.0.12",
@@ -98,8 +98,8 @@
       "@std/bytes@1.0.6": {
         "integrity": "f6ac6adbd8ccd99314045f5703e23af0a68d7f7e58364b47d2c7f408aeb5820a"
       },
-      "@std/collections@1.0.6": {
-        "integrity": "60ad252af7df0594e6455f697920a37cd523ad66469fefcc9735e362826ac01d"
+      "@std/collections@1.1.3": {
+        "integrity": "bf8b0818886df6a32b64c7d3b037a425111f28278d69fd0995aeb62777c986b0"
       },
       "@std/encoding@1.0.10": {
         "integrity": "8783c6384a2d13abd5e9e87a7ae0520a30e9f56aeeaa3bdf910a3eaaf5c811a1"
@@ -192,7 +192,7 @@
       "jsr:@cliffy/table@1.0.0-rc.8",
       "jsr:@retraigo/duration@7.0.0",
       "jsr:@std/assert@1.0.16",
-      "jsr:@std/collections@1.0.6",
+      "jsr:@std/collections@1.1.3",
       "jsr:@std/path@1.0.6",
       "jsr:@std/streams@1.0.4",
       "jsr:@std/yaml@1.0.5",
