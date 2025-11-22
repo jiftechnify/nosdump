@@ -8,16 +8,13 @@
       "jsr:@cliffy/internal@1.0.0-rc.8": "jsr:@cliffy/internal@1.0.0-rc.8",
       "jsr:@cliffy/keycode@1.0.0-rc.8": "jsr:@cliffy/keycode@1.0.0-rc.8",
       "jsr:@cliffy/prompt@1.0.0-rc.8": "jsr:@cliffy/prompt@1.0.0-rc.8",
-      "jsr:@cliffy/table@1.0.0-rc.5": "jsr:@cliffy/table@1.0.0-rc.5",
       "jsr:@cliffy/table@1.0.0-rc.8": "jsr:@cliffy/table@1.0.0-rc.8",
       "jsr:@retraigo/duration@4.1.1": "jsr:@retraigo/duration@4.1.1",
       "jsr:@std/assert@1.0.4": "jsr:@std/assert@1.0.4",
       "jsr:@std/assert@~1.0.6": "jsr:@std/assert@1.0.16",
       "jsr:@std/bytes@^1.0.2": "jsr:@std/bytes@1.0.2",
-      "jsr:@std/cli@1.0.0-rc.2": "jsr:@std/cli@1.0.0-rc.2",
       "jsr:@std/collections@1.0.6": "jsr:@std/collections@1.0.6",
       "jsr:@std/encoding@~1.0.5": "jsr:@std/encoding@1.0.10",
-      "jsr:@std/fmt@~0.225.4": "jsr:@std/fmt@0.225.6",
       "jsr:@std/fmt@~1.0.2": "jsr:@std/fmt@1.0.8",
       "jsr:@std/internal@^1.0.12": "jsr:@std/internal@1.0.12",
       "jsr:@std/internal@^1.0.3": "jsr:@std/internal@1.0.3",
@@ -81,13 +78,6 @@
           "jsr:@std/text@~1.0.7"
         ]
       },
-      "@cliffy/table@1.0.0-rc.5": {
-        "integrity": "2b3e1b4764bbb56b0c39aeba95bc0bb551d9bd4475fbb6d1ce368c08b7ef9eb3",
-        "dependencies": [
-          "jsr:@std/cli@1.0.0-rc.2",
-          "jsr:@std/fmt@~0.225.4"
-        ]
-      },
       "@cliffy/table@1.0.0-rc.8": {
         "integrity": "8bbcdc2ba5e0061b4b13810a24e6f5c6ab19c09f0cce9eb691ccd76c7c6c9db5",
         "dependencies": [
@@ -115,17 +105,11 @@
       "@std/bytes@1.0.6": {
         "integrity": "f6ac6adbd8ccd99314045f5703e23af0a68d7f7e58364b47d2c7f408aeb5820a"
       },
-      "@std/cli@1.0.0-rc.2": {
-        "integrity": "97dfae82b9f0e189768ebfa7a5da53375955b94bad0a1804f8e3b73563b03787"
-      },
       "@std/collections@1.0.6": {
         "integrity": "60ad252af7df0594e6455f697920a37cd523ad66469fefcc9735e362826ac01d"
       },
       "@std/encoding@1.0.10": {
         "integrity": "8783c6384a2d13abd5e9e87a7ae0520a30e9f56aeeaa3bdf910a3eaaf5c811a1"
-      },
-      "@std/fmt@0.225.6": {
-        "integrity": "aba6aea27f66813cecfd9484e074a9e9845782ab0685c030e453a8a70b37afc8"
       },
       "@std/fmt@1.0.8": {
         "integrity": "71e1fc498787e4434d213647a6e43e794af4fd393ef8f52062246e06f7e372b7"
@@ -215,7 +199,7 @@
       "jsr:@cliffy/ansi@1.0.0-rc.8",
       "jsr:@cliffy/command@1.0.0-rc.8",
       "jsr:@cliffy/prompt@1.0.0-rc.8",
-      "jsr:@cliffy/table@1.0.0-rc.5",
+      "jsr:@cliffy/table@1.0.0-rc.8",
       "jsr:@retraigo/duration@4.1.1",
       "jsr:@std/assert@1.0.4",
       "jsr:@std/collections@1.0.6",
