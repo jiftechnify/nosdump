@@ -10,7 +10,7 @@ jobs:
       DENO_DIR: /home/runner/.cache/deno
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Deno
         uses: denoland/setup-deno@v2.0.1
