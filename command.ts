@@ -508,7 +508,7 @@ const parseTimestampSpec = (
   }
 
   // try to parse as duration string. if it's valid duration, return (current time) - (the duration).
-  const parsedDurationSec = Duration.fromString(tsSpec, true).s;
+  const parsedDurationSec = Duration.fromString(tsSpec, false).asSeconds();
   if (parsedDurationSec > 0) {
     return Result.ok(currUnixtime - Math.floor(parsedDurationSec));
   }
