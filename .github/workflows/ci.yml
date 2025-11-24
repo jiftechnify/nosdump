@@ -31,3 +31,13 @@ jobs:
 
       - name: Run tests
         run: deno task test
+
+  typos:
+    name: Detect typos
+    runs-on: ubuntu-slim
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Run typos
+        uses: crate-ci/typos@v1.39.2
