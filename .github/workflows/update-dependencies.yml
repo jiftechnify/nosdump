@@ -27,7 +27,7 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@v2.0.1
         with:
-          deno-version: "~2.0"
+          deno-version: "~2.5"
 
       - name: Update dependencies with molt
         uses: hasundue/molt-action@v1
