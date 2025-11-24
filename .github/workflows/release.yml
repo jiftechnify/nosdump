@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       id-token: write
@@ -20,7 +20,7 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@v2.0.3
         with:
-          deno-version: "~2.0"
+          deno-version: "~2.5"
 
       - name: Use dependency cache
         uses: actions/cache@v4

@@ -493,27 +493,27 @@ const toHexPubkey = (s: string): Result<string, string> => {
  * - duration string (to specify relative time)
  */
 const parseTimestampSpec = (
-  s: string,
+  tsSpec: string,
   currUnixtime: number,
 ): Result<number, string> => {
   // try to parse as unixtime
-  if (/^\d+$/.test(s)) {
-    return Result.ok(Number(s));
+  if (/^\d+$/.test(tsSpec)) {
+    return Result.ok(Number(tsSpec));
   }
 
   // try to parse as ISO 8601 (maybe RFC 3339?) date string in local timezone
-  const parsedISODate = parseISO(s);
+  const parsedISODate = parseISO(tsSpec);
   if (isDateValid(parsedISODate)) {
     return Result.ok(getUnixTime(parsedISODate));
   }
 
   // try to parse as duration string. if it's valid duration, return (current time) - (the duration).
-  const parsedDurationSec = Duration.fromString(s).asSeconds();
+  const parsedDurationSec = Duration.fromString(tsSpec, false).asSeconds();
   if (parsedDurationSec > 0) {
     return Result.ok(currUnixtime - Math.floor(parsedDurationSec));
   }
 
-  return Result.err(`invalid timestamp specifier: ${s}`);
+  return Result.err(`invalid timestamp specifier: ${tsSpec}`);
 };
 
 const mergeResultArray = <T, E>(results: Result<T, E>[]): Result<T[], E[]> => {
