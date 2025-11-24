@@ -5,7 +5,7 @@ on:
 
 jobs:
   ci:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-slim
     env:
       DENO_DIR: /home/runner/.cache/deno
     steps:
