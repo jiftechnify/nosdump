@@ -8,7 +8,10 @@ on:
 
 jobs:
   update:
-    permissions: write-all
+    permissions:
+      contents: write
+      pull-requests: write
+
     runs-on: ubuntu-slim
 
     steps:
@@ -29,7 +32,42 @@ jobs:
         with:
           deno-version: "~2.5"
 
-      - name: Update dependencies with molt
-        uses: hasundue/molt-action@v1
+      - name: Update dependencies with `deno outdated`
+        id: deno-outdated
+        run: |
+          RESULT=$(deno outdated --update 2>&1 | grep -v -e '^Download') || true
+          echo "result<<EOF" >> $GITHUB_OUTPUT
+          echo "$RESULT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          if git diff --quiet; then
+            UPDATED="false"
+          else
+            UPDATED="true"
+          fi
+          echo "updated=$UPDATED" >> $GITHUB_OUTPUT
+
+          echo "result:"
+          echo "$RESULT"
+          echo
+          echo "updated: $UPDATED"
+        env:
+          NO_COLOR: "1"
+
+      - name: Create Pull Request
+        if: steps.deno-outdated.outputs.updated == 'true'
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ steps.create-token.outputs.token }}
+          commit-message: "chore(deps): update deno dependencies"
+          branch: chore/update-deno-deps
+          delete-branch: true
+          title: "chore(deps): Update Deno Dependencies"
+          body: |
+            Updated dependencies with `deno outdated --update`:
+
+            ```
+            ${{ steps.deno-outdated.outputs.result }}
+            ```
+          labels: |
+            dependencies
