@@ -35,7 +35,7 @@ jobs:
       - name: Update dependencies with `deno outdated`
         id: deno-outdated
         run: |
-          RESULT=$(deno outdated --update 2>&1) || true
+          RESULT=$(deno outdated --update 2>&1 | grep -v -e '^Download') || true
           echo "result<<EOF" >> $GITHUB_OUTPUT
           echo "$RESULT" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
