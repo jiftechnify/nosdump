@@ -35,16 +35,22 @@ jobs:
       - name: Update dependencies with `deno outdated`
         id: deno-outdated
         run: |
-          DENO_OUTDATED_OUTPUT=$(deno outdated --update 2>&1) || true
+          RESULT=$(deno outdated --update 2>&1) || true
           echo "result<<EOF" >> $GITHUB_OUTPUT
-          echo "$DENO_OUTDATED_OUTPUT" >> $GITHUB_OUTPUT
+          echo "$RESULT" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
           if git diff --quiet; then
-            echo "updated=false" >> $GITHUB_OUTPUT
+            UPDATED="false"
           else
-            echo "updated=true" >> $GITHUB_OUTPUT
+            UPDATED="true"
           fi
+          echo "updated=$UPDATED" >> $GITHUB_OUTPUT
+
+          echo "result:"
+          echo "$RESULT"
+          echo
+          echo "updated: $UPDATED"
         env:
           NO_COLOR: "1"
 
